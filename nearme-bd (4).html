@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NearMe BD — Worship &amp; ATM Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+/* ── Scoped entirely under #nmbd-root to avoid WordPress theme conflicts ── */
+#nmbd-root *{margin:0;padding:0;box-sizing:border-box}
+#nmbd-root{
+  --gold:#c9a84c;--gold-light:#e8c96e;--gold-dim:#7a6030;
+  --teal:#0e6e6e;--teal-light:#12908f;
+  --nav:#1565C0;--nav-light:#42A5F5;--nav-stop:#e05555;
+  --bg:#0a0f0f;--bg2:#101818;--surface:#1a2828;--surface2:#1f3030;
+  --border:#2a3f3f;--text:#e8eded;--text-muted:#7a9a9a;--green:#4caf7a;
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  position:relative;
+  overflow-x:hidden;
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+#nmbd-root::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23c9a84c' stroke-width='0.3' opacity='0.07'%3E%3Cpolygon points='40,2 52,14 52,26 40,38 28,26 28,14'/%3E%3Cpolygon points='40,42 52,54 52,66 40,78 28,66 28,54'/%3E%3Cpolygon points='2,22 14,10 26,22 14,34'/%3E%3Cpolygon points='54,22 66,10 78,22 66,34'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+#nmbd-root .nmbd-header{
+  position:relative;z-index:10;padding:13px 22px 12px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);
+  background:rgba(10,15,15,0.97);
+}
+#nmbd-root .nmbd-logo{display:flex;align-items:center;gap:10px}
+#nmbd-root .nmbd-logo-icon{
+  width:33px;height:33px;
+  background:linear-gradient(135deg,var(--gold),var(--teal-light));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+#nmbd-root .nmbd-logo-text{
+  font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;
+  background:linear-gradient(90deg,var(--gold-light),var(--teal-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+#nmbd-root .nmbd-logo-sub{
+  font-size:0.62rem;color:var(--text-muted);
+  letter-spacing:.12em;text-transform:uppercase;margin-top:1px;
+}
+#nmbd-root .nmbd-tabs{
+  display:flex;padding:0 22px;
+  background:rgba(10,15,15,0.97);
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:10;
+}
+#nmbd-root .nmbd-tab-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;
+  padding:11px 20px;border:none;background:transparent;color:var(--text-muted);
+  cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+#nmbd-root .nmbd-tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
+#nmbd-root .nmbd-tab-btn:hover:not(.active){color:var(--text)}
+#nmbd-root .nmbd-panel{display:none}
+#nmbd-root .nmbd-panel.active{display:flex;height:calc(100vh - 104px);min-height:500px}
+#nmbd-root .nmbd-sidebar{
+  width:345px;min-width:295px;background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  position:relative;z-index:5;
+}
+#nmbd-root .nmbd-shead{
+  padding:14px 16px 11px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+#nmbd-root .nmbd-stitle{
+  font-family:'Cinzel',serif;font-size:0.76rem;letter-spacing:.12em;
+  color:var(--gold);text-transform:uppercase;margin-bottom:9px;
+}
+#nmbd-root .nmbd-filter-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+#nmbd-root .nmbd-chip{
+  font-size:0.71rem;font-weight:500;padding:4px 9px;border-radius:20px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text-muted);
+  cursor:pointer;transition:all .18s;user-select:none;
+}
+#nmbd-root .nmbd-chip.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold-light)}
+#nmbd-root .nmbd-chip:hover:not(.on){border-color:var(--gold-dim);color:var(--text)}
+#nmbd-root .nmbd-bank-sel{
+  width:100%;padding:7px 10px;background:var(--surface);
+  border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:0.79rem;outline:none;cursor:pointer;
+  transition:border-color .2s;margin-bottom:6px;
+}
+#nmbd-root .nmbd-bank-sel:focus{border-color:var(--gold-dim)}
+#nmbd-root .nmbd-bank-sel option{background:var(--bg2)}
+#nmbd-root .nmbd-radius-row{display:flex;align-items:center;gap:8px;margin-top:2px}
+#nmbd-root .nmbd-radius-lbl{font-size:0.71rem;color:var(--text-muted);white-space:nowrap}
+#nmbd-root input[type=range]{flex:1;accent-color:var(--gold);height:4px;cursor:pointer}
+#nmbd-root .nmbd-radius-val{
+  font-size:0.74rem;color:var(--gold-light);font-weight:600;
+  min-width:38px;text-align:right;
+}
+#nmbd-root .nmbd-search-btn{
+  width:100%;padding:9px;margin-top:8px;
+  background:linear-gradient(135deg,var(--teal),var(--teal-light));
+  border:none;border-radius:8px;color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
+  cursor:pointer;transition:opacity .2s,transform .1s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+#nmbd-root .nmbd-search-btn:hover{opacity:.88}
+#nmbd-root .nmbd-search-btn:active{transform:scale(.98)}
+#nmbd-root .nmbd-search-btn:disabled{opacity:.4;cursor:not-allowed}
+#nmbd-root .nmbd-loc-pill{
+  font-size:0.65rem;color:var(--green);
+  background:rgba(76,175,122,.1);border:1px solid rgba(76,175,122,.25);
+  border-radius:20px;padding:2px 8px;
+  display:inline-flex;align-items:center;gap:4px;margin-top:4px;
+}
+#nmbd-root .nmbd-count{font-size:0.69rem;color:var(--text-muted);padding:5px 12px 2px;text-align:right}
+#nmbd-root .nmbd-count b{color:var(--gold)}
+#nmbd-root .nmbd-list{flex:1;overflow-y:auto;padding:7px 9px}
+#nmbd-root .nmbd-list::-webkit-scrollbar{width:3px}
+#nmbd-root .nmbd-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+#nmbd-root .nmbd-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;margin-bottom:7px;
+  cursor:pointer;transition:border-color .18s,background .18s;
+  position:relative;overflow:hidden;
+}
+#nmbd-root .nmbd-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--gold);border-radius:2px 0 0 2px;opacity:0;transition:opacity .18s;
+}
+#nmbd-root .nmbd-card:hover{border-color:var(--gold-dim);background:var(--surface2)}
+#nmbd-root .nmbd-card:hover::before,
+#nmbd-root .nmbd-card.active-card::before{opacity:1}
+#nmbd-root .nmbd-card.active-card{border-color:var(--gold);background:var(--surface2)}
+#nmbd-root .nmbd-card.nav-active{border-color:var(--nav-light)!important;background:rgba(21,101,192,.12)!important}
+#nmbd-root .nmbd-card.nav-active::before{background:var(--nav-light)!important;opacity:1!important}
+#nmbd-root .nmbd-ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:7px}
+#nmbd-root .nmbd-cicon{font-size:1.15rem;flex-shrink:0}
+#nmbd-root .nmbd-cname{font-size:0.84rem;font-weight:600;color:var(--text);flex:1;line-height:1.3}
+#nmbd-root .nmbd-cdist{
+  font-size:0.7rem;font-weight:600;color:var(--gold-light);
+  white-space:nowrap;background:rgba(201,168,76,.1);
+  padding:2px 7px;border-radius:10px;
+}
+#nmbd-root .nmbd-ctype{font-size:0.65rem;color:var(--teal-light);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+#nmbd-root .nmbd-caddr{font-size:0.7rem;color:var(--text-muted);margin-top:3px;line-height:1.4}
+#nmbd-root .nmbd-cactions{display:flex;gap:6px;margin-top:8px}
+#nmbd-root .nmbd-nav-btn{
+  flex:1;padding:6px 10px;border-radius:7px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:600;
+  cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  background:linear-gradient(135deg,var(--nav),#1976D2);color:#fff;
+  box-shadow:0 2px 10px rgba(21,101,192,.3);
+}
+#nmbd-root .nmbd-nav-btn:hover{opacity:.88;box-shadow:0 2px 16px rgba(21,101,192,.5)}
+#nmbd-root .nmbd-status{padding:26px 16px;text-align:center;color:var(--text-muted);font-size:0.79rem;line-height:1.6}
+#nmbd-root .nmbd-status-icon{font-size:2rem;margin-bottom:7px}
+#nmbd-root .nmbd-spinner{
+  width:24px;height:24px;border:3px solid var(--border);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:nmbd-spin .7s linear infinite;margin:0 auto 9px;
+}
+@keyframes nmbd-spin{to{transform:rotate(360deg)}}
+#nmbd-root .nmbd-err{
+  background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);
+  border-radius:8px;padding:8px 12px;font-size:0.74rem;color:#e08585;margin:7px 9px;
+}
+
+/* ── MAP AREA ── */
+#nmbd-root .nmbd-map-area{flex:1;position:relative}
+#nmbd-root .nmbd-map{width:100%;height:100%}
+#nmbd-root .nmbd-badge{
+  position:absolute;top:10px;right:10px;z-index:500;
+  background:rgba(10,15,15,.9);border:1px solid var(--border);
+  border-radius:8px;padding:6px 12px;font-size:0.7rem;color:var(--text-muted);
+  backdrop-filter:blur(6px);pointer-events:none;
+}
+#nmbd-root .nmbd-badge span{color:var(--gold-light);font-weight:600}
+
+/* ── NAV HUD (simplified — no steps, just live status) ── */
+#nmbd-root .nmbd-hud{
+  position:absolute;bottom:0;left:0;right:0;z-index:800;
+  background:rgba(11,18,18,.97);
+  border-top:2px solid var(--nav-light);
+  backdrop-filter:blur(18px);display:none;
+  box-shadow:0 -6px 32px rgba(66,165,245,.2);
+}
+#nmbd-root .nmbd-hud-row{
+  display:flex;align-items:center;padding:10px 14px;gap:0;
+}
+#nmbd-root .nmbd-hud-live{
+  display:flex;align-items:center;gap:7px;padding-right:14px;
+  border-right:1px solid var(--border);
+}
+#nmbd-root .nmbd-live-dot{
+  width:9px;height:9px;border-radius:50%;background:var(--nav-light);
+  animation:nmbd-blink 1.2s ease-in-out infinite;
+}
+@keyframes nmbd-blink{0%,100%{opacity:1}50%{opacity:.2}}
+#nmbd-root .nmbd-hud-live-lbl{font-size:0.67rem;color:var(--nav-light);font-weight:600;text-transform:uppercase;letter-spacing:.07em}
+#nmbd-root .nmbd-hstat{flex:1;text-align:center;padding:0 4px}
+#nmbd-root .nmbd-hstat-val{font-size:1.05rem;font-weight:700;color:var(--text)}
+#nmbd-root .nmbd-hstat-lbl{font-size:0.59rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:1px}
+#nmbd-root .nmbd-hdivider{width:1px;height:28px;background:var(--border)}
+#nmbd-root .nmbd-hdest{flex:2;padding:0 12px;overflow:hidden}
+#nmbd-root .nmbd-hdest-name{font-size:0.78rem;font-weight:600;color:var(--gold-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nmbd-root .nmbd-hdest-lbl{font-size:0.59rem;color:var(--text-muted);margin-top:1px}
+#nmbd-root .nmbd-stop-btn{
+  background:rgba(224,85,85,.12);border:1px solid var(--nav-stop);
+  color:var(--nav-stop);border-radius:7px;padding:7px 12px;
+  font-size:0.73rem;font-weight:600;cursor:pointer;transition:background .18s;flex-shrink:0;
+}
+#nmbd-root .nmbd-stop-btn:hover{background:rgba(224,85,85,.28)}
+
+/* ── LIVE NAV BADGE (top-left of map) ── */
+#nmbd-root .nmbd-nav-badge{
+  position:absolute;top:10px;left:10px;z-index:600;
+  background:rgba(11,18,18,.92);border:1px solid var(--nav-light);
+  border-radius:8px;padding:5px 10px;font-size:0.7rem;color:var(--nav-light);
+  display:none;align-items:center;gap:6px;
+  animation:nmbd-pulse-border 2s ease-in-out infinite;
+}
+@keyframes nmbd-pulse-border{
+  0%,100%{box-shadow:0 0 0 0 rgba(66,165,245,.4)}
+  50%{box-shadow:0 0 0 5px rgba(66,165,245,0)}
+}
+
+/* ── REROUTING TOAST ── */
+#nmbd-root .nmbd-reroute-toast{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:900;background:rgba(11,18,18,.96);
+  border:1px solid var(--gold);border-radius:12px;
+  padding:13px 20px;font-size:0.82rem;color:var(--gold-light);
+  display:none;text-align:center;pointer-events:none;white-space:nowrap;
+}
+
+/* ── ARRIVED TOAST ── */
+#nmbd-root .nmbd-arrived-toast{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  z-index:950;background:linear-gradient(135deg,#0d4a0d,#1a7a1a);
+  border:1px solid #4caf7a;border-radius:14px;
+  padding:18px 28px;font-size:0.95rem;color:#b8ffb8;
+  text-align:center;pointer-events:none;
+  transition:transform .3s ease;font-weight:600;
+}
+#nmbd-root .nmbd-arrived-toast.show{transform:translate(-50%,-50%) scale(1)}
+
+/* ── LIVE USER DOT ── */
+#nmbd-root .nmbd-live-user-dot{
+  width:14px;height:14px;border-radius:50%;
+  background:#42A5F5;border:2.5px solid #fff;
+  box-shadow:0 0 0 4px rgba(66,165,245,.3);
+  animation:nmbd-live-pulse 1.8s ease-in-out infinite;
+}
+@keyframes nmbd-live-pulse{
+  0%,100%{box-shadow:0 0 0 4px rgba(66,165,245,.25)}
+  50%{box-shadow:0 0 0 10px rgba(66,165,245,0)}
+}
+
+/* ── LEAFLET POPUP THEME ── */
+#nmbd-root .leaflet-popup-content-wrapper{
+  background:var(--surface2)!important;color:var(--text)!important;
+  border:1px solid var(--border)!important;border-radius:10px!important;
+  box-shadow:0 8px 30px rgba(0,0,0,.6)!important;
+}
+#nmbd-root .leaflet-popup-tip{background:var(--surface2)!important}
+#nmbd-root .leaflet-popup-content{font-family:'DM Sans',sans-serif!important;font-size:0.79rem!important}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  #nmbd-root .nmbd-panel.active{flex-direction:column;height:auto}
+  #nmbd-root .nmbd-sidebar{width:100%;min-width:unset;border-right:none;border-bottom:1px solid var(--border);max-height:52vh}
+  #nmbd-root .nmbd-map-area{height:48vh}
+  #nmbd-root .nmbd-hud-live{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ SINGLE ROOT — all styles & JS are scoped here, no WP conflicts ══ -->
+<div id="nmbd-root">
+
+  <header class="nmbd-header">
+    <div class="nmbd-logo">
+      <div class="nmbd-logo-icon">🕌</div>
+      <div>
+        <div class="nmbd-logo-text">NearMe BD</div>
+        <div class="nmbd-logo-sub">Worship &amp; ATM Locator · Live Navigation</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="nmbd-tabs">
+    <button class="nmbd-tab-btn active" id="nmbd-tab-worship">🕌 Worship Places</button>
+    <button class="nmbd-tab-btn"        id="nmbd-tab-atm">🏧 ATM Booths</button>
+  </div>
+
+  <!-- ══ WORSHIP PANEL ══ -->
+  <div id="nmbd-panel-worship" class="nmbd-panel active">
+    <div class="nmbd-sidebar">
+      <div class="nmbd-shead">
+        <div class="nmbd-stitle">Filter by Type</div>
+        <div class="nmbd-filter-row" id="nmbd-worship-chips">
+          <span class="nmbd-chip on" data-type="mosque">🕌 Mosque</span>
+          <span class="nmbd-chip on" data-type="hindu_temple">🛕 Mandir</span>
+          <span class="nmbd-chip on" data-type="church">⛪ Church</span>
+          <span class="nmbd-chip on" data-type="buddhist">🪔 Pagoda</span>
+          <span class="nmbd-chip on" data-type="other">🏛 Other</span>
+        </div>
+        <div class="nmbd-radius-row">
+          <span class="nmbd-radius-lbl">Radius:</span>
+          <input type="range" id="nmbd-worship-radius" min="500" max="10000" step="500" value="3000">
+          <span class="nmbd-radius-val" id="nmbd-worship-rval">3km</span>
+        </div>
+        <button class="nmbd-search-btn" id="nmbd-worship-btn">📍 Find Nearby Worship Places</button>
+        <div id="nmbd-worship-locinfo"></div>
+      </div>
+      <div id="nmbd-worship-count" class="nmbd-count"></div>
+      <div class="nmbd-list" id="nmbd-worship-list">
+        <div class="nmbd-status"><div class="nmbd-status-icon">🕌</div>Click button to find<br>worship places near you.</div>
+      </div>
+    </div>
+    <div class="nmbd-map-area">
+      <div class="nmbd-map" id="nmbd-map-worship"></div>
+      <div class="nmbd-badge" id="nmbd-worship-badge">Click search to load</div>
+      <div class="nmbd-nav-badge" id="nmbd-worship-navbadge"><div class="nmbd-live-dot"></div>&nbsp;Live Navigation</div>
+      <div class="nmbd-hud" id="nmbd-worship-hud">
+        <div class="nmbd-hud-row">
+          <div class="nmbd-hud-live">
+            <div class="nmbd-live-dot"></div>
+            <div class="nmbd-hud-live-lbl">Live</div>
+          </div>
+          <div class="nmbd-hstat">
+            <div class="nmbd-hstat-val" id="nmbd-worship-rdist">–</div>
+            <div class="nmbd-hstat-lbl">Remaining</div>
+          </div>
+          <div class="nmbd-hdivider"></div>
+          <div class="nmbd-hstat">
+            <div class="nmbd-hstat-val" id="nmbd-worship-eta">–</div>
+            <div class="nmbd-hstat-lbl">ETA (walk)</div>
+          </div>
+          <div class="nmbd-hdivider"></div>
+          <div class="nmbd-hdest">
+            <div class="nmbd-hdest-name" id="nmbd-worship-dest">–</div>
+            <div class="nmbd-hdest-lbl">Destination</div>
+          </div>
+          <button class="nmbd-stop-btn" id="nmbd-worship-stopbtn">✕ Stop</button>
+        </div>
+      </div>
+      <div class="nmbd-reroute-toast" id="nmbd-worship-reroute">🔄 Rerouting…</div>
+      <div class="nmbd-arrived-toast" id="nmbd-worship-arrived">🎉 You have arrived!</div>
+    </div>
+  </div>
+
+  <!-- ══ ATM PANEL ══ -->
+  <div id="nmbd-panel-atm" class="nmbd-panel">
+    <div class="nmbd-sidebar">
+      <div class="nmbd-shead">
+        <div class="nmbd-stitle">Filter by Bank</div>
+        <select class="nmbd-bank-sel" id="nmbd-bank-filter">
+          <option value="">🏦 All Banks</option>
+          <option value="Dutch Bangla">Dutch-Bangla Bank (DBBL)</option>
+          <option value="bKash">bKash</option>
+          <option value="BRAC">BRAC Bank</option>
+          <option value="Islami Bank">Islami Bank Bangladesh</option>
+          <option value="Sonali">Sonali Bank</option>
+          <option value="Janata">Janata Bank</option>
+          <option value="Agrani">Agrani Bank</option>
+          <option value="Rupali">Rupali Bank</option>
+          <option value="Eastern Bank">Eastern Bank (EBL)</option>
+          <option value="Mutual Trust">Mutual Trust Bank (MTB)</option>
+          <option value="Prime Bank">Prime Bank</option>
+          <option value="Standard Chartered">Standard Chartered</option>
+          <option value="City Bank">City Bank</option>
+          <option value="AB Bank">AB Bank</option>
+          <option value="Pubali">Pubali Bank</option>
+          <option value="UCB">United Commercial Bank (UCB)</option>
+          <option value="One Bank">One Bank</option>
+          <option value="Social Islami">Social Islami Bank (SIBL)</option>
+          <option value="Southeast Bank">Southeast Bank</option>
+          <option value="Dhaka Bank">Dhaka Bank</option>
+          <option value="Mercantile">Mercantile Bank</option>
+          <option value="National Bank">National Bank</option>
+          <option value="NCC Bank">NCC Bank</option>
+          <option value="Trust Bank">Trust Bank</option>
+          <option value="Exim Bank">Exim Bank</option>
+          <option value="Shahjalal Islami">Shahjalal Islami Bank</option>
+          <option value="Bank Asia">Bank Asia</option>
+          <option value="HSBC">HSBC</option>
+          <option value="Citibank">Citibank</option>
+        </select>
+        <div class="nmbd-radius-row">
+          <span class="nmbd-radius-lbl">Radius:</span>
+          <input type="range" id="nmbd-atm-radius" min="500" max="10000" step="500" value="2000">
+          <span class="nmbd-radius-val" id="nmbd-atm-rval">2km</span>
+        </div>
+        <button class="nmbd-search-btn" id="nmbd-atm-btn">📍 Find Nearby ATMs</button>
+        <div id="nmbd-atm-locinfo"></div>
+      </div>
+      <div id="nmbd-atm-count" class="nmbd-count"></div>
+      <div class="nmbd-list" id="nmbd-atm-list">
+        <div class="nmbd-status"><div class="nmbd-status-icon">🏧</div>Click button to find<br>ATMs near you.</div>
+      </div>
+    </div>
+    <div class="nmbd-map-area">
+      <div class="nmbd-map" id="nmbd-map-atm"></div>
+      <div class="nmbd-badge" id="nmbd-atm-badge">Click search to load</div>
+      <div class="nmbd-nav-badge" id="nmbd-atm-navbadge"><div class="nmbd-live-dot"></div>&nbsp;Live Navigation</div>
+      <div class="nmbd-hud" id="nmbd-atm-hud">
+        <div class="nmbd-hud-row">
+          <div class="nmbd-hud-live">
+            <div class="nmbd-live-dot"></div>
+            <div class="nmbd-hud-live-lbl">Live</div>
+          </div>
+          <div class="nmbd-hstat">
+            <div class="nmbd-hstat-val" id="nmbd-atm-rdist">–</div>
+            <div class="nmbd-hstat-lbl">Remaining</div>
+          </div>
+          <div class="nmbd-hdivider"></div>
+          <div class="nmbd-hstat">
+            <div class="nmbd-hstat-val" id="nmbd-atm-eta">–</div>
+            <div class="nmbd-hstat-lbl">ETA (walk)</div>
+          </div>
+          <div class="nmbd-hdivider"></div>
+          <div class="nmbd-hdest">
+            <div class="nmbd-hdest-name" id="nmbd-atm-dest">–</div>
+            <div class="nmbd-hdest-lbl">Destination</div>
+          </div>
+          <button class="nmbd-stop-btn" id="nmbd-atm-stopbtn">✕ Stop</button>
+        </div>
+      </div>
+      <div class="nmbd-reroute-toast" id="nmbd-atm-reroute">🔄 Rerouting…</div>
+      <div class="nmbd-arrived-toast" id="nmbd-atm-arrived">🎉 You have arrived!</div>
+    </div>
+  </div>
+
+</div><!-- #nmbd-root -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   NearMe BD — fully namespaced IIFE
+   Safe for WordPress / Blogsy (no $ conflicts, unique IDs)
+   ═══════════════════════════════════════════════════════════ */
+(function(window, document){
+  'use strict';
+
+  /* ── helpers ── */
+  function g(id){ return document.getElementById(id); }
+
+  /* ── wait for DOM if WP loads script in <head> ── */
+  function ready(fn){
+    if(document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+
+  /* ══════════════════════ STATE ══════════════════════ */
+  var maps = {};
+  var userMarkers   = { worship: null, atm: null };
+  var placeMarkers  = { worship: [], atm: [] };
+  var rerouteLock   = { worship: false, atm: false };
+
+  /* Per-tab nav state */
+  function mkState(){
+    return { routeLayer:null, casingLayer:null, destMarker:null,
+             liveMarker:null, accCircle:null, watchId:null,
+             active:false, destLat:0, destLon:0, destName:'' };
+  }
+  var ns = { worship: mkState(), atm: mkState() };
+
+  /* ══════════════════════ INIT MAPS ══════════════════════ */
+  function initMaps(){
+    var tile = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var opt  = { attribution:'© OpenStreetMap', maxZoom:19 };
+
+    maps.worship = L.map('nmbd-map-worship',{ zoomControl:true }).setView([23.8103,90.4125],13);
+    L.tileLayer(tile,opt).addTo(maps.worship);
+
+    maps.atm = L.map('nmbd-map-atm',{ zoomControl:true }).setView([23.8103,90.4125],14);
+    L.tileLayer(tile,opt).addTo(maps.atm);
+  }
+
+  /* ══════════════════════ TABS ══════════════════════ */
+  function switchTab(tab){
+    ['worship','atm'].forEach(function(t){
+      g('nmbd-tab-'+t).classList.toggle('active', t===tab);
+      g('nmbd-panel-'+t).classList.toggle('active', t===tab);
+    });
+    setTimeout(function(){ maps[tab] && maps[tab].invalidateSize(); }, 80);
+  }
+
+  /* ══════════════════════ GEO ══════════════════════ */
+  function getLocation(){
+    return new Promise(function(res,rej){
+      if(!navigator.geolocation) return rej('Geolocation not supported');
+      navigator.geolocation.getCurrentPosition(
+        function(p){ res({ lat:p.coords.latitude, lon:p.coords.longitude }); },
+        function(e){ rej(e.message || 'Location denied'); },
+        { enableHighAccuracy:true, timeout:12000 }
+      );
+    });
+  }
+
+  function haversine(lat1,lon1,lat2,lon2){
+    var R=6371000, d=Math.PI/180;
+    var dLat=(lat2-lat1)*d, dLon=(lon2-lon1)*d;
+    var a=Math.sin(dLat/2)*Math.sin(dLat/2)+
+          Math.cos(lat1*d)*Math.cos(lat2*d)*
+          Math.sin(dLon/2)*Math.sin(dLon/2);
+    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  }
+
+  function fmtDist(m){
+    return m<1000 ? Math.round(m)+'m' : (m/1000).toFixed(1)+'km';
+  }
+  function fmtTime(s){
+    var m=Math.round(s/60);
+    return m<60 ? m+' min' : Math.floor(m/60)+'h '+(m%60)+'m';
+  }
+
+  /* ══════════════════════ ICONS ══════════════════════ */
+  function mkIcon(emoji,bg){
+    return L.divIcon({
+      html:'<div style="font-size:17px;background:'+bg+';width:29px;height:29px;'+
+           'border-radius:50%;display:flex;align-items:center;justify-content:center;'+
+           'border:2px solid rgba(255,255,255,.3);box-shadow:0 2px 8px rgba(0,0,0,.5)">'+emoji+'</div>',
+      className:'', iconSize:[29,29], iconAnchor:[14,14], popupAnchor:[0,-15]
+    });
+  }
+  function mkLiveIcon(){
+    return L.divIcon({
+      html:'<div class="nmbd-live-user-dot"></div>',
+      className:'', iconSize:[14,14], iconAnchor:[7,7]
+    });
+  }
+
+  var WI = {
+    mosque:       mkIcon('🕌','#2a5a3a'),
+    hindu_temple: mkIcon('🛕','#7a3a00'),
+    church:       mkIcon('⛪','#3a3a7a'),
+    buddhist:     mkIcon('🪔','#5a4a00'),
+    other:        mkIcon('🏛','#3a3a3a')
+  };
+  var ATM_ICON  = mkIcon('🏧','#1a5a6a');
+  var DEST_ICON = mkIcon('📌','#c9a84c');
+  var USER_ICON = mkIcon('👤','#0e6e6e');
+
+  /* ══════════════════════ CLASSIFY WORSHIP ══════════════════════ */
+  function classify(tags){
+    var r=(tags.religion||'').toLowerCase(), n=(tags.name||'').toLowerCase();
+    if(r.includes('islam')||r.includes('muslim')||n.includes('masjid')||n.includes('mosque')||n.includes('মসজিদ')) return 'mosque';
+    if(r.includes('hindu')||n.includes('mandir')||n.includes('মন্দির'))  return 'hindu_temple';
+    if(r.includes('christ')||n.includes('church')||n.includes('চার্চ')) return 'church';
+    if(r.includes('buddh')||n.includes('pagoda')||n.includes('বৌদ্ধ'))  return 'buddhist';
+    return 'other';
+  }
+  var WE = { mosque:'🕌', hindu_temple:'🛕', church:'⛪', buddhist:'🪔', other:'🏛' };
+  var WL = { mosque:'Mosque', hindu_temple:'Mandir / Temple', church:'Church', buddhist:'Pagoda / Buddhist', other:'Place of Worship' };
+
+  /* ══════════════════════ OVERPASS — parallel race + cache ══════════════════════ */
+  var OVERPASS_MIRRORS = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://overpass.openstreetmap.ru/api/interpreter',
+    'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
+  ];
+
+  /* In-memory cache: key = query string → {ts, data} */
+  var _ovCache = {};
+
+  function overpassQuery(q){
+    /* Return cached result if under 3 minutes old */
+    var ckey = q;
+    var now = Date.now();
+    if(_ovCache[ckey] && (now - _ovCache[ckey].ts) < 180000){
+      return Promise.resolve(_ovCache[ckey].data);
+    }
+
+    var body = 'data=' + encodeURIComponent(q);
+
+    /* Fire ALL mirrors simultaneously — take whichever wins */
+    function tryMirror(url){
+      return fetch(url, { method:'POST', body:body })
+        .then(function(r){
+          if(!r.ok) throw new Error('HTTP '+r.status);
+          return r.json();
+        })
+        .then(function(d){
+          if(d.remark && d.remark.indexOf('timeout')>-1) throw new Error('Timeout');
+          if(!d.elements) throw new Error('Bad response');
+          return d;
+        });
+    }
+
+    /* Promise.any polyfill — resolves on first success */
+    function anyOf(promises){
+      return new Promise(function(resolve, reject){
+        var errors = [];
+        var remaining = promises.length;
+        if(!remaining) return reject(new Error('No mirrors'));
+        promises.forEach(function(p){
+          p.then(function(val){
+            resolve(val); /* first success wins — others are ignored */
+          }).catch(function(err){
+            errors.push(err);
+            remaining--;
+            if(remaining === 0) reject(new Error('All mirrors failed'));
+          });
+        });
+      });
+    }
+
+    return anyOf(OVERPASS_MIRRORS.map(tryMirror))
+      .then(function(data){
+        _ovCache[ckey] = { ts: Date.now(), data: data };
+        return data;
+      });
+  }
+
+  /* ══════════════════════ ROUTING (OSRM) ══════════════════════ */
+  function fetchRoute(fLat,fLon,tLat,tLon){
+    var url='https://router.project-osrm.org/route/v1/foot/'+fLon+','+fLat+';'+tLon+','+tLat+'?overview=full&geometries=geojson';
+    return fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d.code!=='Ok'||!d.routes.length) throw new Error('No route');
+        return d.routes[0];
+      });
+  }
+
+  /* ══════════════════════ STOP NAVIGATION ══════════════════════ */
+  function stopNav(tab, silent){
+    var s=ns[tab], map=maps[tab];
+    s.active=false;
+    if(s.watchId){ navigator.geolocation.clearWatch(s.watchId); s.watchId=null; }
+    [s.routeLayer,s.casingLayer,s.destMarker,s.liveMarker,s.accCircle].forEach(function(l){
+      if(l) map.removeLayer(l);
+    });
+    s.routeLayer=s.casingLayer=s.destMarker=s.liveMarker=s.accCircle=null;
+    g('nmbd-'+tab+'-hud').style.display='none';
+    g('nmbd-'+tab+'-navbadge').style.display='none';
+    rerouteLock[tab]=false;
+    /* clear nav-active highlight */
+    document.querySelectorAll('#nmbd-panel-'+tab+' .nmbd-card').forEach(function(c){
+      c.classList.remove('nav-active','active-card');
+    });
+  }
+
+  /* ══════════════════════ START NAVIGATION ══════════════════════ */
+  function startNav(tab, dLat, dLon, dName, cardEl){
+    /* Stop BOTH tabs first — auto-cancel previous navigation anywhere */
+    stopNav('worship');
+    stopNav('atm');
+
+    var s=ns[tab], map=maps[tab];
+    s.destLat=dLat; s.destLon=dLon; s.destName=dName; s.active=true;
+
+    /* Highlight the chosen card */
+    document.querySelectorAll('.nmbd-card').forEach(function(c){ c.classList.remove('nav-active','active-card'); });
+    if(cardEl) cardEl.classList.add('nav-active');
+
+    getLocation().then(function(loc){
+      /* Draw route */
+      return fetchRoute(loc.lat,loc.lon,dLat,dLon).then(function(route){
+        var coords=route.geometry.coordinates.map(function(c){ return [c[1],c[0]]; });
+        s.routeLayer=L.polyline(coords,{color:'#42A5F5',weight:6,opacity:.88,lineCap:'round',lineJoin:'round'}).addTo(map);
+        s.casingLayer=L.polyline(coords,{color:'#1565C0',weight:11,opacity:.28,lineCap:'round'}).addTo(map);
+        finishNav(tab,loc,route);
+      }).catch(function(){
+        /* Fallback: straight dashed line */
+        var coords=[[loc.lat,loc.lon],[dLat,dLon]];
+        s.routeLayer=L.polyline(coords,{color:'#42A5F5',weight:5,opacity:.8,dashArray:'8,6'}).addTo(map);
+        s.casingLayer=L.polyline(coords,{color:'#1565C0',weight:9,opacity:.25}).addTo(map);
+        finishNav(tab,loc,null);
+      });
+    }).catch(function(e){
+      alert('Cannot get location: '+e);
+      s.active=false;
+    });
+  }
+
+  function finishNav(tab,loc,route){
+    var s=ns[tab], map=maps[tab];
+
+    /* Destination pin */
+    s.destMarker=L.marker([s.destLat,s.destLon],{icon:DEST_ICON}).addTo(map)
+      .bindPopup('<b>📌 '+s.destName+'</b>');
+
+    /* Live user dot */
+    s.liveMarker=L.marker([loc.lat,loc.lon],{icon:mkLiveIcon(),zIndexOffset:1000}).addTo(map);
+    s.accCircle=L.circle([loc.lat,loc.lon],{radius:20,color:'#42A5F5',fillColor:'#42A5F5',fillOpacity:.1,weight:1}).addTo(map);
+
+    /* Fit map */
+    if(s.routeLayer) map.fitBounds(s.routeLayer.getBounds().pad(0.12));
+
+    /* HUD */
+    var dist=route ? route.distance : haversine(loc.lat,loc.lon,s.destLat,s.destLon);
+    updateHUD(tab, dist, s.destName);
+    g('nmbd-'+tab+'-hud').style.display='block';
+    g('nmbd-'+tab+'-navbadge').style.display='flex';
+
+    /* Live watch */
+    s.watchId=navigator.geolocation.watchPosition(
+      function(pos){ onUpdate(tab,pos); },
+      function(err){ console.warn('GPS:', err.message); },
+      { enableHighAccuracy:true, maximumAge:1500, timeout:10000 }
+    );
+  }
+
+  /* ══════════════════════ LIVE UPDATE ══════════════════════ */
+  function onUpdate(tab,pos){
+    var s=ns[tab];
+    if(!s.active) return;
+
+    var lat=pos.coords.latitude, lon=pos.coords.longitude;
+    var map=maps[tab];
+
+    /* Move live marker */
+    if(s.liveMarker) s.liveMarker.setLatLng([lat,lon]);
+    if(s.accCircle){
+      s.accCircle.setLatLng([lat,lon]);
+      s.accCircle.setRadius(Math.max(pos.coords.accuracy||20,8));
+    }
+
+    var distToDest=haversine(lat,lon,s.destLat,s.destLon);
+
+    /* Arrived? */
+    if(distToDest<25){
+      updateHUD(tab,0,s.destName);
+      showArrived(tab);
+      stopNav(tab,true);
+      return;
+    }
+
+    /* Off-route reroute */
+    if(s.routeLayer && !rerouteLock[tab]){
+      var pts=s.routeLayer.getLatLngs();
+      var minDist=pts.reduce(function(mn,p){ return Math.min(mn,haversine(lat,lon,p.lat,p.lng)); },Infinity);
+      if(minDist>90){
+        rerouteLock[tab]=true;
+        g('nmbd-'+tab+'-reroute').style.display='block';
+        fetchRoute(lat,lon,s.destLat,s.destLon).then(function(newRoute){
+          var nc=newRoute.geometry.coordinates.map(function(c){ return [c[1],c[0]]; });
+          s.routeLayer.setLatLngs(nc);
+          s.casingLayer.setLatLngs(nc);
+          g('nmbd-'+tab+'-reroute').style.display='none';
+          rerouteLock[tab]=false;
+        }).catch(function(){
+          g('nmbd-'+tab+'-reroute').style.display='none';
+          rerouteLock[tab]=false;
+        });
+      }
+    }
+
+    /* Update HUD */
+    updateHUD(tab, distToDest, s.destName);
+
+    /* Pan map smoothly to follow user */
+    map.panTo([lat,lon],{ animate:true, duration:0.9, easeLinearity:0.5 });
+  }
+
+  function updateHUD(tab, distM, dname){
+    g('nmbd-'+tab+'-rdist').textContent = fmtDist(distM);
+    g('nmbd-'+tab+'-eta').textContent   = fmtTime(distM/1.2);
+    g('nmbd-'+tab+'-dest').textContent  = dname;
+  }
+
+  function showArrived(tab){
+    var t=g('nmbd-'+tab+'-arrived');
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 3000);
+  }
+
+  /* ══════════════════════ WORSHIP SEARCH ══════════════════════ */
+  function searchWorship(){
+    var btn=g('nmbd-worship-btn'), list=g('nmbd-worship-list'),
+        ct=g('nmbd-worship-count'), badge=g('nmbd-worship-badge'),
+        li=g('nmbd-worship-locinfo');
+
+    var types=[];
+    document.querySelectorAll('#nmbd-worship-chips .nmbd-chip.on').forEach(function(c){
+      types.push(c.dataset.type);
+    });
+    if(!types.length){
+      list.innerHTML='<div class="nmbd-err">⚠️ Select at least one type.</div>';
+      return;
+    }
+
+    btn.disabled=true;
+    btn.innerHTML=spinnerHtml()+' Locating…';
+    list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting location…</div>';
+
+    getLocation().then(function(loc){
+      li.innerHTML='<div class="nmbd-loc-pill">✅ '+loc.lat.toFixed(4)+', '+loc.lon.toFixed(4)+'</div>';
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching…</div>';
+
+      var radius=g('nmbd-worship-radius').value;
+      var q='[out:json][timeout:30][maxsize:1048576];node["amenity"="place_of_worship"](around:'+radius+','+loc.lat+','+loc.lon+');out;';
+
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching nearby…</div>';
+      return overpassQuery(q).then(function(d){
+          var places=d.elements.map(function(el){
+            var lt=el.lat||(el.center&&el.center.lat);
+            var ln=el.lon||(el.center&&el.center.lon);
+            if(!lt||!ln) return null;
+            var tp=classify(el.tags||{});
+            return { id:el.id, lat:lt, lon:ln, type:tp, dist:haversine(loc.lat,loc.lon,lt,ln), tags:el.tags||{} };
+          }).filter(function(p){ return p && types.indexOf(p.type)>-1; });
+
+          places.sort(function(a,b){ return a.dist-b.dist; });
+          renderWorship(places,loc);
+        });
+    }).catch(function(e){
+      list.innerHTML='<div class="nmbd-err">❌ All servers failed or timed out. Please wait 10 seconds and try again.</div>';
+      badge.textContent='Error';
+    }).then(function(){
+      btn.disabled=false;
+      btn.innerHTML='📍 Find Nearby Worship Places';
+    });
+  }
+
+  function renderWorship(places,loc){
+    var map=maps.worship, list=g('nmbd-worship-list'),
+        ct=g('nmbd-worship-count'), badge=g('nmbd-worship-badge');
+
+    placeMarkers.worship.forEach(function(m){ map.removeLayer(m); });
+    placeMarkers.worship=[];
+    if(userMarkers.worship) map.removeLayer(userMarkers.worship);
+    userMarkers.worship=L.marker([loc.lat,loc.lon],{icon:USER_ICON}).addTo(map).bindPopup('<b>📍 You are here</b>');
+
+    if(!places.length){
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No results. Try wider radius.</div>';
+      ct.textContent=''; badge.textContent='No results';
+      map.setView([loc.lat,loc.lon],14); return;
+    }
+
+    ct.innerHTML='Found <b>'+places.length+'</b> places';
+    badge.innerHTML='<span>'+places.length+'</span> found';
+    list.innerHTML='';
+
+    places.forEach(function(p,i){
+      var name=p.tags.name||p.tags['name:en']||WL[p.type];
+      var addr=[p.tags['addr:street'],p.tags['addr:city']].filter(Boolean).join(', ');
+      var safeName=name.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+      var card=document.createElement('div');
+      card.className='nmbd-card';
+      card.innerHTML=
+        '<div class="nmbd-ctop">'+
+          '<div class="nmbd-cicon">'+WE[p.type]+'</div>'+
+          '<div style="flex:1">'+
+            '<div class="nmbd-cname">'+safeName+'</div>'+
+            '<div class="nmbd-ctype">'+WL[p.type]+'</div>'+
+            (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
+          '</div>'+
+          '<div class="nmbd-cdist">'+fmtDist(p.dist)+'</div>'+
+        '</div>'+
+        '<div class="nmbd-cactions">'+
+          '<button class="nmbd-nav-btn">🧭 Navigate Here</button>'+
+        '</div>';
+
+      /* Navigate button */
+      card.querySelector('.nmbd-nav-btn').addEventListener('click', function(e){
+        e.stopPropagation();
+        startNav('worship',p.lat,p.lon,name,card);
+      });
+
+      /* Card click — zoom & popup */
+      card.addEventListener('click', function(){
+        document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
+        card.classList.add('active-card');
+        map.setView([p.lat,p.lon],17);
+        placeMarkers.worship[i].openPopup();
+      });
+
+      list.appendChild(card);
+
+      var mk=L.marker([p.lat,p.lon],{icon:WI[p.type]||WI.other}).addTo(map)
+        .bindPopup(
+          '<b>'+safeName+'</b><br>'+
+          '<small style="color:#12908f">'+WL[p.type]+'</small><br>'+
+          '<small style="color:#e8c96e">'+fmtDist(p.dist)+' away</small><br>'+
+          '<button id="nmbd-mpop-w'+p.id+'" style="margin-top:6px;width:100%;padding:5px;background:#1565C0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🧭 Navigate Here</button>'
+        );
+      mk.on('popupopen',function(){
+        var btn=document.getElementById('nmbd-mpop-w'+p.id);
+        if(btn) btn.onclick=function(){ startNav('worship',p.lat,p.lon,name,card); };
+      });
+      mk.on('click',function(){
+        document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
+        card.classList.add('active-card');
+        card.scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+      placeMarkers.worship.push(mk);
+    });
+
+    var g2=L.featureGroup([userMarkers.worship].concat(placeMarkers.worship));
+    maps.worship.fitBounds(g2.getBounds().pad(0.15));
+  }
+
+  /* ══════════════════════ ATM SEARCH ══════════════════════ */
+  function searchATM(){
+    var btn=g('nmbd-atm-btn'), list=g('nmbd-atm-list'),
+        ct=g('nmbd-atm-count'), badge=g('nmbd-atm-badge'),
+        li=g('nmbd-atm-locinfo');
+
+    var bf=(g('nmbd-bank-filter').value||'').toLowerCase();
+
+    btn.disabled=true;
+    btn.innerHTML=spinnerHtml()+' Locating…';
+    list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting location…</div>';
+
+    getLocation().then(function(loc){
+      li.innerHTML='<div class="nmbd-loc-pill">✅ '+loc.lat.toFixed(4)+', '+loc.lon.toFixed(4)+'</div>';
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching ATMs…</div>';
+
+      var radius=g('nmbd-atm-radius').value;
+      var q='[out:json][timeout:30][maxsize:1048576];(node["amenity"="atm"](around:'+radius+','+loc.lat+','+loc.lon+');node["amenity"="bank"](around:'+radius+','+loc.lat+','+loc.lon+'););out;';
+
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching ATMs… (trying servers)</div>';
+      return overpassQuery(q).then(function(d){
+          var atms=d.elements.map(function(e){
+            if(!e.lat||!e.lon) return null;
+            var t=e.tags||{};
+            var nm=t.operator||t.name||t.brand||'Unknown Bank';
+            return { id:e.id, lat:e.lat, lon:e.lon, name:nm, dist:haversine(loc.lat,loc.lon,e.lat,e.lon), tags:t, type:t.amenity };
+          }).filter(function(a){
+            return a && (!bf || a.name.toLowerCase().includes(bf));
+          });
+          atms.sort(function(a,b){ return a.dist-b.dist; });
+          renderATM(atms,loc,bf);
+        });
+    }).catch(function(e){
+      list.innerHTML='<div class="nmbd-err">❌ All servers failed or timed out. Please wait 10 seconds and try again.</div>';
+      badge.textContent='Error';
+    }).then(function(){
+      btn.disabled=false;
+      btn.innerHTML='📍 Find Nearby ATMs';
+    });
+  }
+
+  function renderATM(atms,loc,bf){
+    var map=maps.atm, list=g('nmbd-atm-list'),
+        ct=g('nmbd-atm-count'), badge=g('nmbd-atm-badge');
+
+    placeMarkers.atm.forEach(function(m){ map.removeLayer(m); });
+    placeMarkers.atm=[];
+    if(userMarkers.atm) map.removeLayer(userMarkers.atm);
+    userMarkers.atm=L.marker([loc.lat,loc.lon],{icon:USER_ICON}).addTo(map).bindPopup('<b>📍 You are here</b>');
+
+    if(!atms.length){
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No ATMs found'+(bf?' for this bank':'')+'.</div>';
+      ct.textContent=''; badge.textContent='No ATMs';
+      map.setView([loc.lat,loc.lon],15); return;
+    }
+
+    ct.innerHTML='Found <b>'+atms.length+'</b> ATMs';
+    badge.innerHTML='<span>'+atms.length+'</span> ATMs';
+    list.innerHTML='';
+
+    atms.forEach(function(a,i){
+      var isATM=a.type==='atm';
+      var addr=[a.tags['addr:street'],a.tags['addr:city']].filter(Boolean).join(', ');
+      var safeName=a.name.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+      var card=document.createElement('div');
+      card.className='nmbd-card';
+      card.innerHTML=
+        '<div class="nmbd-ctop">'+
+          '<div class="nmbd-cicon">'+(isATM?'🏧':'🏦')+'</div>'+
+          '<div style="flex:1">'+
+            '<div class="nmbd-cname">'+safeName+'</div>'+
+            '<div class="nmbd-ctype">'+(isATM?'ATM Booth':'Bank Branch')+'</div>'+
+            (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
+          '</div>'+
+          '<div class="nmbd-cdist">'+fmtDist(a.dist)+'</div>'+
+        '</div>'+
+        '<div class="nmbd-cactions">'+
+          '<button class="nmbd-nav-btn">🧭 Navigate Here</button>'+
+        '</div>';
+
+      card.querySelector('.nmbd-nav-btn').addEventListener('click', function(e){
+        e.stopPropagation();
+        startNav('atm',a.lat,a.lon,a.name,card);
+      });
+
+      card.addEventListener('click', function(){
+        document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
+        card.classList.add('active-card');
+        map.setView([a.lat,a.lon],18);
+        placeMarkers.atm[i].openPopup();
+      });
+
+      list.appendChild(card);
+
+      var mk=L.marker([a.lat,a.lon],{icon:ATM_ICON}).addTo(map)
+        .bindPopup(
+          '<b>'+safeName+'</b><br>'+
+          '<small style="color:#12908f">'+(isATM?'🏧 ATM':'🏦 Bank')+'</small><br>'+
+          '<small style="color:#e8c96e">'+fmtDist(a.dist)+' away</small><br>'+
+          '<button id="nmbd-mpop-a'+a.id+'" style="margin-top:6px;width:100%;padding:5px;background:#1565C0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🧭 Navigate Here</button>'
+        );
+      mk.on('popupopen',function(){
+        var btn=document.getElementById('nmbd-mpop-a'+a.id);
+        if(btn) btn.onclick=function(){ startNav('atm',a.lat,a.lon,a.name,card); };
+      });
+      mk.on('click',function(){
+        document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
+        card.classList.add('active-card');
+        card.scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+      placeMarkers.atm.push(mk);
+    });
+
+    var g2=L.featureGroup([userMarkers.atm].concat(placeMarkers.atm));
+    maps.atm.fitBounds(g2.getBounds().pad(0.15));
+  }
+
+  function spinnerHtml(){
+    return '<div style="width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:nmbd-spin .7s linear infinite;display:inline-block"></div>';
+  }
+
+  /* ══════════════════════ WIRE UP EVENTS (no inline onclick) ══════════════════════ */
+  ready(function(){
+    /* Guard: if Leaflet not loaded yet, bail */
+    if(typeof L === 'undefined'){
+      console.error('NearMe BD: Leaflet not loaded.');
+      return;
+    }
+
+    initMaps();
+
+    /* Tabs */
+    g('nmbd-tab-worship').addEventListener('click', function(){ switchTab('worship'); });
+    g('nmbd-tab-atm').addEventListener('click',     function(){ switchTab('atm'); });
+
+    /* Search buttons */
+    g('nmbd-worship-btn').addEventListener('click', searchWorship);
+    g('nmbd-atm-btn').addEventListener('click',     searchATM);
+
+    /* Stop nav buttons */
+    g('nmbd-worship-stopbtn').addEventListener('click', function(){ stopNav('worship'); });
+    g('nmbd-atm-stopbtn').addEventListener('click',     function(){ stopNav('atm'); });
+
+    /* Filter chips toggle */
+    document.querySelectorAll('#nmbd-worship-chips .nmbd-chip').forEach(function(c){
+      c.addEventListener('click', function(){ c.classList.toggle('on'); });
+    });
+
+    /* Radius sliders */
+    g('nmbd-worship-radius').addEventListener('input', function(){
+      g('nmbd-worship-rval').textContent=Math.round(this.value/1000*10)/10+'km';
+    });
+    g('nmbd-atm-radius').addEventListener('input', function(){
+      g('nmbd-atm-rval').textContent=Math.round(this.value/1000*10)/10+'km';
+    });
+  });
+
+})(window, document);
+</script>
+
+</body>
+</html>
