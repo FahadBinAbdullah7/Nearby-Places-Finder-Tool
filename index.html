@@ -133,6 +133,44 @@
   box-shadow:0 4px 20px rgba(0,0,0,.5);white-space:nowrap;
 }
 #nmbd-back-btn.visible{display:block}
+
+/* ── Location prompt banner ── */
+#nmbd-loc-prompt{
+  position:fixed;top:0;left:0;right:0;z-index:3000;
+  background:linear-gradient(135deg,#0e4a4a,#12908f);
+  color:#e8eded;font-family:'DM Sans',sans-serif;
+  font-size:0.82rem;padding:12px 18px;
+  display:none;align-items:center;gap:10px;
+  box-shadow:0 3px 16px rgba(0,0,0,.5);
+}
+#nmbd-loc-prompt.visible{display:flex}
+#nmbd-loc-prompt .nlp-icon{font-size:1.3rem;flex-shrink:0}
+#nmbd-loc-prompt .nlp-text{flex:1;line-height:1.4}
+#nmbd-loc-prompt .nlp-text b{display:block;font-size:0.86rem;margin-bottom:2px}
+#nmbd-loc-prompt .nlp-text span{font-size:0.74rem;opacity:.85}
+
+/* ── Desktop-mode hint toast ── */
+#nmbd-desktop-hint{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  z-index:3000;
+  background:rgba(10,15,15,.97);
+  border:1px solid var(--gold);border-radius:14px;
+  padding:20px 24px;max-width:280px;width:90%;
+  font-family:'DM Sans',sans-serif;text-align:center;
+  box-shadow:0 8px 32px rgba(0,0,0,.7);
+  transition:transform .25s ease;
+}
+#nmbd-desktop-hint.visible{transform:translate(-50%,-50%) scale(1)}
+#nmbd-desktop-hint .ndh-icon{font-size:2rem;margin-bottom:8px}
+#nmbd-desktop-hint .ndh-title{font-size:0.9rem;font-weight:600;color:var(--gold-light);margin-bottom:6px}
+#nmbd-desktop-hint .ndh-body{font-size:0.76rem;color:var(--text-muted);line-height:1.5;margin-bottom:14px}
+#nmbd-desktop-hint .ndh-ok{
+  background:linear-gradient(135deg,var(--teal),var(--teal-light));
+  border:none;border-radius:8px;color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;
+  padding:8px 24px;cursor:pointer;width:100%;
+}
 @media(max-width:700px){
   #nmbd-root .nmbd-panel.active{flex-direction:column;height:auto}
   #nmbd-root .nmbd-sidebar{width:100%;min-width:unset;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}
@@ -279,6 +317,26 @@
 
 <!-- floating back-to-list button for mobile nav -->
 <button id="nmbd-back-btn">← Back to List</button>
+
+<!-- location permission prompt banner -->
+<div id="nmbd-loc-prompt">
+  <div class="nlp-icon">📍</div>
+  <div class="nlp-text">
+    <b>Location access needed</b>
+    <span>Please tap Allow when your browser asks for your location.</span>
+  </div>
+</div>
+
+<!-- desktop mode hint toast (shown on mobile when Navigate Here is tapped) -->
+<div id="nmbd-desktop-hint">
+  <div class="ndh-icon">🖥️</div>
+  <div class="ndh-title">Enable Desktop Mode</div>
+  <div class="ndh-body">
+    For the best navigation experience on mobile, please enable
+    <b>Desktop Site / Desktop View</b> in your browser menu before navigating.
+  </div>
+  <button class="ndh-ok" id="nmbd-desktop-ok">Got it — Navigate Anyway</button>
+</div>
 
 <script>
 (function(window,document){
@@ -638,6 +696,34 @@
     var t=g('nmbd-'+tab+'-arrived'); t.classList.add('show');
     setTimeout(function(){ t.classList.remove('show'); },3000);
   }
+  /* Show/hide the location prompt banner */
+  function showLocPrompt(){
+    var el=document.getElementById('nmbd-loc-prompt');
+    if(el) el.classList.add('visible');
+  }
+  function hideLocPrompt(){
+    var el=document.getElementById('nmbd-loc-prompt');
+    if(el) el.classList.remove('visible');
+  }
+
+  /* Show the desktop-mode hint on mobile, then run callback.
+     Tapping "Got it — Navigate Anyway" fires the callback immediately.
+     Auto-dismisses after 6s if user doesn't tap. */
+  function showDesktopHint(cb){
+    if(!isMobile()){ cb(); return; }
+    var overlay=document.getElementById('nmbd-desktop-hint');
+    var okBtn=document.getElementById('nmbd-desktop-ok');
+    if(!overlay){ cb(); return; }
+    overlay.classList.add('visible');
+    function proceed(){
+      overlay.classList.remove('visible');
+      clearTimeout(autoTimer);
+      cb();
+    }
+    if(okBtn) okBtn.onclick=proceed;
+    var autoTimer=setTimeout(proceed,6000);
+  }
+
   function spin(){ return '<div style="width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:nmbd-spin .7s linear infinite;display:inline-block;vertical-align:middle"></div>'; }
 
   function showError(list,badge,retryFn){
@@ -662,7 +748,9 @@
     if(!types.length){ list.innerHTML='<div style="padding:9px"><div class="nmbd-err">⚠️ Select at least one type.</div></div>'; return; }
     btn.disabled=true; btn.innerHTML=spin()+' Locating…';
     list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting location…</div>';
+    showLocPrompt(); /* tell user to allow location before browser prompt fires */
     getLocation().then(function(loc){
+      hideLocPrompt();
       li.innerHTML='<div class="nmbd-loc-pill">✅ '+loc.lat.toFixed(4)+', '+loc.lon.toFixed(4)+'</div>';
       list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Contacting map servers…</div>';
       var radius=g('nmbd-worship-radius').value;
@@ -680,6 +768,7 @@
         renderWorship(places,loc);
       });
     }).catch(function(){
+      hideLocPrompt();
       showError(list,badge,function(){ btn.disabled=false; searchWorship(); });
     }).then(function(){ btn.disabled=false; btn.innerHTML='📍 Find Nearby Worship Places'; });
   }
@@ -705,7 +794,10 @@
         (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
         '</div><div class="nmbd-cdist">'+fmtDist(p.dist)+'</div></div>'+
         '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🧭 Navigate Here</button></div>';
-      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){ e.stopPropagation(); startNav('worship',p.lat,p.lon,name,card); });
+      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){
+        e.stopPropagation();
+        showDesktopHint(function(){ startNav('worship',p.lat,p.lon,name,card); });
+      });
       card.addEventListener('click',function(){
         document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); map.setView([p.lat,p.lon],17); placeMarkers.worship[i].openPopup();
@@ -715,7 +807,7 @@
         .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+WL[p.type]+'</small><br>'+
           '<small style="color:#e8c96e">'+fmtDist(p.dist)+' away</small><br>'+
           '<button id="nmbd-mpop-w'+p.id+'" style="margin-top:6px;width:100%;padding:5px;background:#1565C0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🧭 Navigate Here</button>');
-      mk.on('popupopen',function(){ var b=document.getElementById('nmbd-mpop-w'+p.id); if(b) b.onclick=function(){ startNav('worship',p.lat,p.lon,name,card); }; });
+      mk.on('popupopen',function(){ var b=document.getElementById('nmbd-mpop-w'+p.id); if(b) b.onclick=function(){ showDesktopHint(function(){ startNav('worship',p.lat,p.lon,name,card); }); }; });
       mk.on('click',function(){
         document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -732,7 +824,9 @@
     var bf=(g('nmbd-bank-filter').value||'').toLowerCase();
     btn.disabled=true; btn.innerHTML=spin()+' Locating…';
     list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting location…</div>';
+    showLocPrompt();
     getLocation().then(function(loc){
+      hideLocPrompt();
       li.innerHTML='<div class="nmbd-loc-pill">✅ '+loc.lat.toFixed(4)+', '+loc.lon.toFixed(4)+'</div>';
       list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Contacting map servers…</div>';
       var radius=g('nmbd-atm-radius').value;
@@ -749,6 +843,7 @@
         renderATM(atms,loc,bf);
       });
     }).catch(function(){
+      hideLocPrompt();
       showError(list,badge,function(){ btn.disabled=false; searchATM(); });
     }).then(function(){ btn.disabled=false; btn.innerHTML='📍 Find Nearby ATMs'; });
   }
@@ -774,7 +869,10 @@
         (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
         '</div><div class="nmbd-cdist">'+fmtDist(a.dist)+'</div></div>'+
         '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🧭 Navigate Here</button></div>';
-      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){ e.stopPropagation(); startNav('atm',a.lat,a.lon,a.name,card); });
+      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){
+        e.stopPropagation();
+        showDesktopHint(function(){ startNav('atm',a.lat,a.lon,a.name,card); });
+      });
       card.addEventListener('click',function(){
         document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); map.setView([a.lat,a.lon],18); placeMarkers.atm[i].openPopup();
@@ -784,7 +882,7 @@
         .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+(isATM?'🏧 ATM':'🏦 Bank')+'</small><br>'+
           '<small style="color:#e8c96e">'+fmtDist(a.dist)+' away</small><br>'+
           '<button id="nmbd-mpop-a'+a.id+'" style="margin-top:6px;width:100%;padding:5px;background:#1565C0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🧭 Navigate Here</button>');
-      mk.on('popupopen',function(){ var b=document.getElementById('nmbd-mpop-a'+a.id); if(b) b.onclick=function(){ startNav('atm',a.lat,a.lon,a.name,card); }; });
+      mk.on('popupopen',function(){ var b=document.getElementById('nmbd-mpop-a'+a.id); if(b) b.onclick=function(){ showDesktopHint(function(){ startNav('atm',a.lat,a.lon,a.name,card); }); }; });
       mk.on('click',function(){
         document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
