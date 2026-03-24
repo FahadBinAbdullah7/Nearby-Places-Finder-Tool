@@ -119,15 +119,26 @@
 #nmbd-root .leaflet-popup-content-wrapper{background:var(--surface2)!important;color:var(--text)!important;border:1px solid var(--border)!important;border-radius:10px!important;box-shadow:0 8px 30px rgba(0,0,0,.6)!important}
 #nmbd-root .leaflet-popup-tip{background:var(--surface2)!important}
 #nmbd-root .leaflet-popup-content{font-family:'DM Sans',sans-serif!important;font-size:0.79rem!important}
+/* ── Mobile nav-mode: sidebar hidden, map fills screen ── */
+#nmbd-root .nmbd-panel.nav-mode .nmbd-sidebar{display:none!important}
+#nmbd-root .nmbd-panel.nav-mode .nmbd-map-area{height:100vh!important}
+/* Back-to-list floating button (only shown in nav-mode on mobile) */
+#nmbd-back-btn{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  z-index:2000;display:none;
+  background:rgba(10,15,15,.95);border:1px solid var(--gold);
+  color:var(--gold-light);border-radius:24px;
+  padding:10px 22px;font-family:'DM Sans',sans-serif;
+  font-size:0.82rem;font-weight:600;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);white-space:nowrap;
+}
+#nmbd-back-btn.visible{display:block}
 @media(max-width:700px){
   #nmbd-root .nmbd-panel.active{flex-direction:column;height:auto}
   #nmbd-root .nmbd-sidebar{width:100%;min-width:unset;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}
-  /* Map area tall enough to see route on mobile */
   #nmbd-root .nmbd-map-area{height:60vh;min-height:320px}
   #nmbd-root .nmbd-hud-live{display:none}
-  /* Prevent Leaflet controls being hidden under the HUD */
   #nmbd-root .leaflet-bottom.leaflet-right{bottom:58px}
-  /* Larger touch targets for nav buttons on mobile */
   #nmbd-root .nmbd-nav-btn{padding:10px 12px;font-size:0.82rem}
   #nmbd-root .nmbd-stop-btn{padding:10px 14px}
 }
@@ -265,6 +276,9 @@
   </div>
 
 </div>
+
+<!-- floating back-to-list button for mobile nav -->
+<button id="nmbd-back-btn">← Back to List</button>
 
 <script>
 (function(window,document){
@@ -504,6 +518,11 @@
     g('nmbd-'+tab+'-navbadge').style.display='none';
     rerouteLock[tab]=false;
     document.querySelectorAll('#nmbd-panel-'+tab+' .nmbd-card').forEach(function(c){ c.classList.remove('nav-active','active-card'); });
+    /* Restore mobile layout */
+    g('nmbd-panel-'+tab).classList.remove('nav-mode');
+    var backBtn=document.getElementById('nmbd-back-btn');
+    if(backBtn) backBtn.classList.remove('visible');
+    setTimeout(function(){ map.invalidateSize(); },100);
   }
 
   function startNav(tab,dLat,dLon,dName,cardEl){
@@ -527,31 +546,59 @@
     }).catch(function(e){ alert('Cannot get location: '+e); s.active=false; });
   }
 
+  function isMobile(){ return window.innerWidth <= 700; }
+
   function finishNav(tab,loc,route){
     var s=ns[tab],map=maps[tab];
     s.destMarker=L.marker([s.destLat,s.destLon],{icon:DEST_ICON}).addTo(map).bindPopup('<b>📌 '+s.destName+'</b>');
     s.liveMarker=L.marker([loc.lat,loc.lon],{icon:mkLiveIcon(),zIndexOffset:1000}).addTo(map);
     s.accCircle=L.circle([loc.lat,loc.lon],{radius:20,color:'#42A5F5',fillColor:'#42A5F5',fillOpacity:.1,weight:1}).addTo(map);
 
-    /* Show HUD before fitBounds so Leaflet has correct dimensions */
     g('nmbd-'+tab+'-hud').style.display='block';
     g('nmbd-'+tab+'-navbadge').style.display='flex';
     var dist=route?route.distance:haversine(loc.lat,loc.lon,s.destLat,s.destLon);
     updateHUD(tab,dist,s.destName);
 
-    /* Mobile fix: map is BELOW the sidebar — scroll it into view,
-       then invalidateSize so Leaflet recalculates its container
-       dimensions, then fitBounds with the correct size */
-    var mapArea=document.querySelector('#nmbd-panel-'+tab+' .nmbd-map-area');
-    if(mapArea) mapArea.scrollIntoView({behavior:'smooth',block:'start'});
+    if(isMobile()){
+      /* On mobile: hide sidebar, give map full height, scroll page to top
+         so the map is immediately visible without any scrolling needed */
+      g('nmbd-panel-'+tab).classList.add('nav-mode');
+      var backBtn=document.getElementById('nmbd-back-btn');
+      if(backBtn){
+        backBtn.classList.add('visible');
+        backBtn.onclick=function(){
+          g('nmbd-panel-'+tab).classList.remove('nav-mode');
+          backBtn.classList.remove('visible');
+          map.invalidateSize();
+        };
+      }
+      /* Scroll the entire page to the top so the iframe map is in view */
+      try{ window.parent.scrollTo({top:0,behavior:'smooth'}); }catch(e){}
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    /* invalidateSize + fitBounds after layout settles */
     setTimeout(function(){
       map.invalidateSize();
       if(s.routeLayer) map.fitBounds(s.routeLayer.getBounds().pad(0.12));
       else map.setView([loc.lat,loc.lon],15);
-    }, 400);
+    }, 300);
 
     startWatch(function(pos){ onUpdate(tab,pos); });
     s.watchId = true;
+  }
+
+  /* Track last time user manually interacted with each map.
+     Auto-pan is suppressed for 10s after any drag/pinch/touch.
+     This stops the map from jumping back every GPS tick. */
+  var _lastUserInteraction = {worship:0, atm:0};
+
+  function bindMapInteraction(tab){
+    var map=maps[tab];
+    function markInteraction(){ _lastUserInteraction[tab]=Date.now(); }
+    map.on('dragstart',  markInteraction);
+    map.on('zoomstart',  markInteraction);
+    map.on('touchstart', markInteraction);
   }
 
   function onUpdate(tab,pos){
@@ -575,7 +622,11 @@
       }
     }
     updateHUD(tab,d,s.destName);
-    map.panTo([lat,lon],{animate:true,duration:0.9,easeLinearity:0.5});
+    /* Only auto-pan if user hasn't manually moved the map in the last 10 seconds */
+    var idleMs = Date.now() - _lastUserInteraction[tab];
+    if(idleMs > 10000){
+      map.panTo([lat,lon],{animate:true,duration:0.9,easeLinearity:0.5});
+    }
   }
 
   function updateHUD(tab,distM,dn){
@@ -746,6 +797,8 @@
   ready(function(){
     if(typeof L==='undefined'){ console.error('NearMe BD: Leaflet not loaded.'); return; }
     initMaps();
+    bindMapInteraction('worship');
+    bindMapInteraction('atm');
     g('nmbd-tab-worship').addEventListener('click',function(){ switchTab('worship'); });
     g('nmbd-tab-atm').addEventListener('click',    function(){ switchTab('atm'); });
     g('nmbd-worship-btn').addEventListener('click', searchWorship);
