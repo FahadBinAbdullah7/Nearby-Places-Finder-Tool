@@ -121,9 +121,15 @@
 #nmbd-root .leaflet-popup-content{font-family:'DM Sans',sans-serif!important;font-size:0.79rem!important}
 @media(max-width:700px){
   #nmbd-root .nmbd-panel.active{flex-direction:column;height:auto}
-  #nmbd-root .nmbd-sidebar{width:100%;min-width:unset;border-right:none;border-bottom:1px solid var(--border);max-height:52vh}
-  #nmbd-root .nmbd-map-area{height:48vh}
+  #nmbd-root .nmbd-sidebar{width:100%;min-width:unset;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}
+  /* Map area tall enough to see route on mobile */
+  #nmbd-root .nmbd-map-area{height:60vh;min-height:320px}
   #nmbd-root .nmbd-hud-live{display:none}
+  /* Prevent Leaflet controls being hidden under the HUD */
+  #nmbd-root .leaflet-bottom.leaflet-right{bottom:58px}
+  /* Larger touch targets for nav buttons on mobile */
+  #nmbd-root .nmbd-nav-btn{padding:10px 12px;font-size:0.82rem}
+  #nmbd-root .nmbd-stop-btn{padding:10px 14px}
 }
 </style>
 </head>
@@ -345,20 +351,25 @@
       _locResolve = res;
       _locReject  = rej;
 
-      /* Ask parent first */
+      /* Ask parent first — parent calls geolocation so prompt shows
+         the WordPress domain name, not github.io */
       postToParent({type:'nmbd-req-loc'});
 
-      /* Fallback: if parent doesn't reply in 4s, use iframe geolocation directly */
+      /* Fallback: if parent doesn't reply in 2s (direct GitHub access
+         or parent script not loaded), call geolocation directly.
+         maximumAge:0 forces a FRESH GPS fix — prevents stale cached
+         location being returned silently (causes "no results" on mobile
+         because cached coords may be from a different city/area) */
       _locFallbackTimer = setTimeout(function(){
-        if(!_locResolve) return; /* already resolved */
+        if(!_locResolve) return; /* parent already responded */
         _locResolve = null; _locReject = null;
         if(!navigator.geolocation) return rej('Geolocation not supported');
         navigator.geolocation.getCurrentPosition(
           function(p){ res({lat:p.coords.latitude,lon:p.coords.longitude}); },
           function(e){ rej(e.message||'Location denied'); },
-          {enableHighAccuracy:true,timeout:12000}
+          {enableHighAccuracy:true, maximumAge:0, timeout:15000}
         );
-      }, 4000);
+      }, 2000);
     });
   }
 
@@ -521,13 +532,26 @@
     s.destMarker=L.marker([s.destLat,s.destLon],{icon:DEST_ICON}).addTo(map).bindPopup('<b>📌 '+s.destName+'</b>');
     s.liveMarker=L.marker([loc.lat,loc.lon],{icon:mkLiveIcon(),zIndexOffset:1000}).addTo(map);
     s.accCircle=L.circle([loc.lat,loc.lon],{radius:20,color:'#42A5F5',fillColor:'#42A5F5',fillOpacity:.1,weight:1}).addTo(map);
-    if(s.routeLayer) map.fitBounds(s.routeLayer.getBounds().pad(0.12));
-    var dist=route?route.distance:haversine(loc.lat,loc.lon,s.destLat,s.destLon);
-    updateHUD(tab,dist,s.destName);
+
+    /* Show HUD before fitBounds so Leaflet has correct dimensions */
     g('nmbd-'+tab+'-hud').style.display='block';
     g('nmbd-'+tab+'-navbadge').style.display='flex';
+    var dist=route?route.distance:haversine(loc.lat,loc.lon,s.destLat,s.destLon);
+    updateHUD(tab,dist,s.destName);
+
+    /* Mobile fix: map is BELOW the sidebar — scroll it into view,
+       then invalidateSize so Leaflet recalculates its container
+       dimensions, then fitBounds with the correct size */
+    var mapArea=document.querySelector('#nmbd-panel-'+tab+' .nmbd-map-area');
+    if(mapArea) mapArea.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(function(){
+      map.invalidateSize();
+      if(s.routeLayer) map.fitBounds(s.routeLayer.getBounds().pad(0.12));
+      else map.setView([loc.lat,loc.lon],15);
+    }, 400);
+
     startWatch(function(pos){ onUpdate(tab,pos); });
-    s.watchId = true; /* flag — actual watch is managed by startWatch/stopWatch */
+    s.watchId = true;
   }
 
   function onUpdate(tab,pos){
