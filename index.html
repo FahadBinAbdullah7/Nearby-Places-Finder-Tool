@@ -288,15 +288,110 @@
     setTimeout(function(){ maps[tab]&&maps[tab].invalidateSize(); },80);
   }
 
+  /* ══════════════════════════════════════════════════════════
+     LOCATION via postMessage
+     
+     Why: when the iframe calls navigator.geolocation directly,
+     the browser permission prompt shows "github.io wants your
+     location". By routing through the PARENT page instead, the
+     prompt shows the parent domain (e.g. techperbyte.com).
+
+     How it works:
+       iframe  → postMessage({type:'nmbd-req-loc'})  → parent
+       parent  → navigator.geolocation.getCurrentPosition
+       parent  → postMessage({type:'nmbd-loc', lat, lon}) → iframe
+       iframe  ← resolves the Promise with {lat, lon}
+
+     watchPosition works the same way:
+       iframe  → nmbd-watch-start  → parent starts watchPosition
+       parent  → nmbd-watch-update → iframe receives each update
+       iframe  → nmbd-watch-stop   → parent clears the watch
+     
+     Fallback: if parent doesn't respond within 4s (e.g. direct
+     GitHub Pages access without the WP wrapper), we fall back to
+     calling geolocation directly inside the iframe.
+  ══════════════════════════════════════════════════════════ */
+
+  var _locResolve = null, _locReject = null;
+  var _watchCb    = null; /* callback for live watch updates */
+  var _locFallbackTimer = null;
+
+  /* Listen for messages from parent page */
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    if(!d || !d.type) return;
+
+    if(d.type === 'nmbd-loc'){
+      /* Response to a one-time location request */
+      clearTimeout(_locFallbackTimer);
+      if(_locResolve){ _locResolve({lat: d.lat, lon: d.lon}); _locResolve = null; _locReject = null; }
+    }
+    if(d.type === 'nmbd-loc-err'){
+      clearTimeout(_locFallbackTimer);
+      if(_locReject){ _locReject(d.msg || 'Location denied'); _locResolve = null; _locReject = null; }
+    }
+    if(d.type === 'nmbd-watch-update'){
+      /* Continuous GPS updates during navigation */
+      if(_watchCb) _watchCb({coords:{latitude:d.lat,longitude:d.lon,accuracy:d.accuracy||20}});
+    }
+  });
+
+  function postToParent(msg){
+    try{ window.parent.postMessage(msg, '*'); }catch(e){}
+  }
+
   function getLocation(){
     return new Promise(function(res,rej){
-      if(!navigator.geolocation) return rej('Geolocation not supported');
-      navigator.geolocation.getCurrentPosition(
-        function(p){ res({lat:p.coords.latitude,lon:p.coords.longitude}); },
-        function(e){ rej(e.message||'Location denied'); },
-        {enableHighAccuracy:true,timeout:12000}
-      );
+      _locResolve = res;
+      _locReject  = rej;
+
+      /* Ask parent first */
+      postToParent({type:'nmbd-req-loc'});
+
+      /* Fallback: if parent doesn't reply in 4s, use iframe geolocation directly */
+      _locFallbackTimer = setTimeout(function(){
+        if(!_locResolve) return; /* already resolved */
+        _locResolve = null; _locReject = null;
+        if(!navigator.geolocation) return rej('Geolocation not supported');
+        navigator.geolocation.getCurrentPosition(
+          function(p){ res({lat:p.coords.latitude,lon:p.coords.longitude}); },
+          function(e){ rej(e.message||'Location denied'); },
+          {enableHighAccuracy:true,timeout:12000}
+        );
+      }, 4000);
     });
+  }
+
+  /* Called by finishNav to start live GPS tracking */
+  function startWatch(cb){
+    _watchCb = cb;
+    postToParent({type:'nmbd-watch-start'});
+
+    /* Fallback: direct watchPosition if no parent response in 4s */
+    var gotUpdate = false;
+    var fallbackTimer = setTimeout(function(){
+      if(gotUpdate) return;
+      if(!navigator.geolocation) return;
+      navigator.geolocation.watchPosition(
+        function(pos){ _watchCb && _watchCb(pos); },
+        function(err){ console.warn('GPS fallback:', err.message); },
+        {enableHighAccuracy:true,maximumAge:1500,timeout:10000}
+      );
+    }, 4000);
+
+    /* Mark first update received so fallback doesn't double-fire */
+    var origCb = cb;
+    _watchCb = function(pos){
+      gotUpdate = true;
+      clearTimeout(fallbackTimer);
+      _watchCb = origCb; /* restore original cb */
+      origCb(pos);
+    };
+  }
+
+  function stopWatch(){
+    _watchCb = null;
+    postToParent({type:'nmbd-watch-stop'});
   }
 
   function haversine(lat1,lon1,lat2,lon2){
@@ -343,12 +438,12 @@
     'https://overpass.osm.ch/api/interpreter'
   ];
   var _cache={};
-  var TIMEOUT=15000, STAGGER=600, RETRY_WAIT=2000;
+  var TIMEOUT=20000, STAGGER=600, RETRY_WAIT=2000;
 
   function tryMirror(url,body){
     var ctrl=new AbortController();
     var t=setTimeout(function(){ ctrl.abort(); },TIMEOUT);
-    return fetch(url,{method:'POST',body:body,credentials:'omit',referrerPolicy:'no-referrer-when-downgrade',signal:ctrl.signal})
+    return fetch(url,{method:'POST',body:body,mode:'cors',credentials:'omit',referrerPolicy:'no-referrer-when-downgrade',signal:ctrl.signal})
       .then(function(r){ clearTimeout(t); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
       .then(function(d){ if(d.remark&&d.remark.indexOf('timeout')>-1) throw new Error('timeout'); if(!d.elements) throw new Error('bad'); return d; })
       .catch(function(e){ clearTimeout(t); throw e; });
@@ -391,7 +486,7 @@
   function stopNav(tab){
     var s=ns[tab],map=maps[tab];
     s.active=false;
-    if(s.watchId){ navigator.geolocation.clearWatch(s.watchId); s.watchId=null; }
+    if(s.watchId){ stopWatch(); s.watchId=null; }
     [s.routeLayer,s.casingLayer,s.destMarker,s.liveMarker,s.accCircle].forEach(function(l){ if(l) map.removeLayer(l); });
     s.routeLayer=s.casingLayer=s.destMarker=s.liveMarker=s.accCircle=null;
     g('nmbd-'+tab+'-hud').style.display='none';
@@ -431,11 +526,8 @@
     updateHUD(tab,dist,s.destName);
     g('nmbd-'+tab+'-hud').style.display='block';
     g('nmbd-'+tab+'-navbadge').style.display='flex';
-    s.watchId=navigator.geolocation.watchPosition(
-      function(pos){ onUpdate(tab,pos); },
-      function(err){ console.warn('GPS:',err.message); },
-      {enableHighAccuracy:true,maximumAge:1500,timeout:10000}
-    );
+    startWatch(function(pos){ onUpdate(tab,pos); });
+    s.watchId = true; /* flag — actual watch is managed by startWatch/stopWatch */
   }
 
   function onUpdate(tab,pos){
