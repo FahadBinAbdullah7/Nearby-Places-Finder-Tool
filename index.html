@@ -297,43 +297,52 @@
     if(tab==='atm') fullClearATM();
   }
 
-    // ── FIXED FULL CLEAR FUNCTIONS ──
+      // ── IMPROVED FULL CLEAR FUNCTIONS (fixes repeated clear issue) ──
   function fullClearWorship(){
-    // Remove all markers safely
-    placeMarkers.worship.forEach(function(m){ 
-      if (m && maps.worship.hasLayer(m)) maps.worship.removeLayer(m); 
+    // Safely remove only markers that are still on the map
+    placeMarkers.worship = placeMarkers.worship.filter(function(m) {
+      if (m && maps.worship.hasLayer(m)) {
+        maps.worship.removeLayer(m);
+        return false; // remove from array
+      }
+      return false;
     });
-    placeMarkers.worship = [];
-    
+
     if(userMarkers.worship){ 
-      maps.worship.removeLayer(userMarkers.worship); 
+      if (maps.worship.hasLayer(userMarkers.worship)) {
+        maps.worship.removeLayer(userMarkers.worship);
+      }
       userMarkers.worship = null; 
     }
 
-    // Reset UI completely
+    // Reset UI
     g('nmbd-worship-count').textContent = '';
     g('nmbd-worship-badge').textContent = 'Ready — search again';
     g('nmbd-worship-locinfo').innerHTML = '';
     
-    // Reset list with ready message
     g('nmbd-worship-list').innerHTML = 
       '<div class="nmbd-status"><div class="nmbd-status-icon">🕌</div>Session cleared.<br>Change radius if needed and click search.</div>';
 
-    // Force Leaflet to reset properly
+    // Force full map reset
     maps.worship.invalidateSize();
     setTimeout(() => {
       maps.worship.setView([23.8103, 90.4125], 13);
-    }, 100);
+    }, 120);
   }
 
   function fullClearATM(){
-    placeMarkers.atm.forEach(function(m){ 
-      if (m && maps.atm.hasLayer(m)) maps.atm.removeLayer(m); 
+    placeMarkers.atm = placeMarkers.atm.filter(function(m) {
+      if (m && maps.atm.hasLayer(m)) {
+        maps.atm.removeLayer(m);
+        return false;
+      }
+      return false;
     });
-    placeMarkers.atm = [];
-    
+
     if(userMarkers.atm){ 
-      maps.atm.removeLayer(userMarkers.atm); 
+      if (maps.atm.hasLayer(userMarkers.atm)) {
+        maps.atm.removeLayer(userMarkers.atm);
+      }
       userMarkers.atm = null; 
     }
 
@@ -347,7 +356,7 @@
     maps.atm.invalidateSize();
     setTimeout(() => {
       maps.atm.setView([23.8103, 90.4125], 14);
-    }, 100);
+    }, 120);
   }
 
   /* ── Rest of your original code remains exactly the same ── */
