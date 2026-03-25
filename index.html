@@ -297,33 +297,45 @@
     if(tab==='atm') fullClearATM();
   }
 
-  // ── FIXED FULL CLEAR FUNCTIONS ──
+    // ── FIXED FULL CLEAR FUNCTIONS ──
   function fullClearWorship(){
-    // Remove all markers
-    placeMarkers.worship.forEach(function(m){ if(m && maps.worship.hasLayer(m)) maps.worship.removeLayer(m); });
+    // Remove all markers safely
+    placeMarkers.worship.forEach(function(m){ 
+      if (m && maps.worship.hasLayer(m)) maps.worship.removeLayer(m); 
+    });
     placeMarkers.worship = [];
-    if(userMarkers.worship){ maps.worship.removeLayer(userMarkers.worship); userMarkers.worship=null; }
+    
+    if(userMarkers.worship){ 
+      maps.worship.removeLayer(userMarkers.worship); 
+      userMarkers.worship = null; 
+    }
 
-    // Reset UI
+    // Reset UI completely
     g('nmbd-worship-count').textContent = '';
     g('nmbd-worship-badge').textContent = 'Ready — search again';
     g('nmbd-worship-locinfo').innerHTML = '';
     
-    // Reset list
+    // Reset list with ready message
     g('nmbd-worship-list').innerHTML = 
       '<div class="nmbd-status"><div class="nmbd-status-icon">🕌</div>Session cleared.<br>Change radius if needed and click search.</div>';
 
-    // Force map reset
+    // Force Leaflet to reset properly
     maps.worship.invalidateSize();
-    setTimeout(function(){
+    setTimeout(() => {
       maps.worship.setView([23.8103, 90.4125], 13);
-    }, 50);
+    }, 100);
   }
 
   function fullClearATM(){
-    placeMarkers.atm.forEach(function(m){ if(m && maps.atm.hasLayer(m)) maps.atm.removeLayer(m); });
+    placeMarkers.atm.forEach(function(m){ 
+      if (m && maps.atm.hasLayer(m)) maps.atm.removeLayer(m); 
+    });
     placeMarkers.atm = [];
-    if(userMarkers.atm){ maps.atm.removeLayer(userMarkers.atm); userMarkers.atm=null; }
+    
+    if(userMarkers.atm){ 
+      maps.atm.removeLayer(userMarkers.atm); 
+      userMarkers.atm = null; 
+    }
 
     g('nmbd-atm-count').textContent = '';
     g('nmbd-atm-badge').textContent = 'Ready — search again';
@@ -333,9 +345,9 @@
       '<div class="nmbd-status"><div class="nmbd-status-icon">🏧</div>Session cleared.<br>Change radius if needed and click search.</div>';
 
     maps.atm.invalidateSize();
-    setTimeout(function(){
+    setTimeout(() => {
       maps.atm.setView([23.8103, 90.4125], 14);
-    }, 50);
+    }, 100);
   }
 
   /* ── Rest of your original code remains exactly the same ── */
