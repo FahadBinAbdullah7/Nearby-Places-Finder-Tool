@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NearMe BD — Worship &amp; ATM Finder</title>
+<title>NearMe BD — Worship & ATM Finder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <style>
+/* Your existing CSS remains unchanged */
 #nmbd-root *{margin:0;padding:0;box-sizing:border-box}
 #nmbd-root{
   --gold:#c9a84c;--gold-light:#e8c96e;--gold-dim:#7a6030;
@@ -56,8 +56,7 @@
 #nmbd-root .nmbd-search-btn:hover{opacity:.88}
 #nmbd-root .nmbd-search-btn:active{transform:scale(.98)}
 #nmbd-root .nmbd-search-btn:disabled{opacity:.4;cursor:not-allowed}
-
-/* ── NAVIGATION ACTIVE BANNER ── */
+/* Navigation Active Banner */
 #nmbd-root .nmbd-navclear{
   display:none;
   margin-top:9px;
@@ -86,7 +85,6 @@
 }
 #nmbd-root .nmbd-navclear-btn:hover{background:linear-gradient(135deg,#a86a1a,#c9852a);border-color:var(--amber);box-shadow:0 2px 12px rgba(232,154,42,.25)}
 #nmbd-root .nmbd-navclear-btn:active{transform:scale(.97)}
-
 #nmbd-root .nmbd-loc-pill{font-size:0.65rem;color:var(--green);background:rgba(76,175,122,.1);border:1px solid rgba(76,175,122,.25);border-radius:20px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;margin-top:4px}
 #nmbd-root .nmbd-count{font-size:0.69rem;color:var(--text-muted);padding:5px 12px 2px;text-align:right}
 #nmbd-root .nmbd-count b{color:var(--gold)}
@@ -128,7 +126,6 @@
 #nmbd-loc-prompt .nlp-text span{font-size:0.74rem;color:#b8e0e0}
 #nmbd-gmaps-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:4000;background:#0e1a1a;border:2px solid #22a35c;border-radius:14px;padding:22px 28px;max-width:280px;width:90%;font-family:'DM Sans',sans-serif;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.85);transition:transform .22s ease}
 #nmbd-gmaps-toast.visible{transform:translate(-50%,-50%) scale(1)}
-#nmbd-gmaps-toast.visible::before{content:'';position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:-1}
 #nmbd-gmaps-toast .ngt-icon{font-size:2.2rem;margin-bottom:8px;display:block}
 #nmbd-gmaps-toast .ngt-title{font-size:0.95rem;font-weight:700;color:#4cdf8a;display:block;margin-bottom:6px}
 #nmbd-gmaps-toast .ngt-body{font-size:0.76rem;color:#c0d8d8;line-height:1.5;display:block;margin-bottom:16px}
@@ -144,22 +141,19 @@
 </head>
 <body>
 <div id="nmbd-root">
-
   <header class="nmbd-header">
     <div class="nmbd-logo">
       <div class="nmbd-logo-icon">🕌</div>
       <div>
         <div class="nmbd-logo-text">NearMe BD</div>
-        <div class="nmbd-logo-sub">Worship &amp; ATM Locator · Google Maps Navigation</div>
+        <div class="nmbd-logo-sub">Worship & ATM Locator · Google Maps Navigation</div>
       </div>
     </div>
   </header>
-
   <div class="nmbd-tabs">
     <button class="nmbd-tab-btn active" id="nmbd-tab-worship">🕌 Worship Places</button>
-    <button class="nmbd-tab-btn"        id="nmbd-tab-atm">🏧 ATM Booths</button>
+    <button class="nmbd-tab-btn" id="nmbd-tab-atm">🏧 ATM Booths</button>
   </div>
-
   <div id="nmbd-panel-worship" class="nmbd-panel active">
     <div class="nmbd-sidebar">
       <div class="nmbd-shead">
@@ -177,8 +171,6 @@
           <span class="nmbd-radius-val" id="nmbd-worship-rval">3km</span>
         </div>
         <button class="nmbd-search-btn" id="nmbd-worship-btn">📍 Find Nearby Worship Places</button>
-
-        <!-- NAV CLEAR BANNER — worship -->
         <div class="nmbd-navclear" id="nmbd-navclear-worship">
           <div class="nmbd-navclear-top">
             <div class="nmbd-navclear-icon">🧭</div>
@@ -187,9 +179,8 @@
               <span class="nmbd-navclear-sub">You navigated to a location. Clear the previous session before searching again.</span>
             </div>
           </div>
-          <button class="nmbd-navclear-btn" id="nmbd-navclear-worship-btn">✕ Clear &amp; Search Fresh</button>
+          <button class="nmbd-navclear-btn" id="nmbd-navclear-worship-btn">✕ Clear & Search Fresh</button>
         </div>
-
         <div id="nmbd-worship-locinfo"></div>
       </div>
       <div id="nmbd-worship-count" class="nmbd-count"></div>
@@ -202,7 +193,6 @@
       <div class="nmbd-badge" id="nmbd-worship-badge">Click search to load</div>
     </div>
   </div>
-
   <div id="nmbd-panel-atm" class="nmbd-panel">
     <div class="nmbd-sidebar">
       <div class="nmbd-shead">
@@ -245,8 +235,6 @@
           <span class="nmbd-radius-val" id="nmbd-atm-rval">2km</span>
         </div>
         <button class="nmbd-search-btn" id="nmbd-atm-btn">📍 Find Nearby ATMs</button>
-
-        <!-- NAV CLEAR BANNER — atm -->
         <div class="nmbd-navclear" id="nmbd-navclear-atm">
           <div class="nmbd-navclear-top">
             <div class="nmbd-navclear-icon">🧭</div>
@@ -255,9 +243,8 @@
               <span class="nmbd-navclear-sub">You navigated to a location. Clear the previous session before searching again.</span>
             </div>
           </div>
-          <button class="nmbd-navclear-btn" id="nmbd-navclear-atm-btn">✕ Clear &amp; Search Fresh</button>
+          <button class="nmbd-navclear-btn" id="nmbd-navclear-atm-btn">✕ Clear & Search Fresh</button>
         </div>
-
         <div id="nmbd-atm-locinfo"></div>
       </div>
       <div id="nmbd-atm-count" class="nmbd-count"></div>
@@ -270,7 +257,6 @@
       <div class="nmbd-badge" id="nmbd-atm-badge">Click search to load</div>
     </div>
   </div>
-
 </div>
 
 <div id="nmbd-loc-prompt">
@@ -291,18 +277,14 @@
 <script>
 (function(window,document){
   'use strict';
-
   function g(id){ return document.getElementById(id); }
   function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
 
   var maps={}, userMarkers={worship:null,atm:null}, placeMarkers={worship:[],atm:[]};
-
-  /* ══ NAV STATE ══
-     Track whether the user has an active navigation session per tab.
-     While active, the search button is locked until they click Clear.
-  ══════════════════ */
   var _navActive={worship:false, atm:false};
+  var _cache={};
 
+  /* ==================== NAV & CLEAR LOGIC ==================== */
   function setNavActive(tab){
     _navActive[tab]=true;
     g('nmbd-'+tab+'-btn').disabled=true;
@@ -313,42 +295,70 @@
     _navActive[tab]=false;
     g('nmbd-'+tab+'-btn').disabled=false;
     g('nmbd-navclear-'+tab).classList.remove('visible');
-    // Wipe map & list so user starts clean
-    if(tab==='worship') fullClearWorship();
-    if(tab==='atm')     fullClearATM();
+
+    if(tab==='worship') fullClearWorship(true);
+    if(tab==='atm') fullClearATM(true);
   }
 
-  function fullClearWorship(){
-    placeMarkers.worship.forEach(function(m){ maps.worship.removeLayer(m); });
-    placeMarkers.worship=[];
-    if(userMarkers.worship){ maps.worship.removeLayer(userMarkers.worship); userMarkers.worship=null; }
-    g('nmbd-worship-count').textContent='';
-    g('nmbd-worship-badge').textContent='Ready — search again';
-    g('nmbd-worship-locinfo').innerHTML='';
-    g('nmbd-worship-list').innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🕌</div>Session cleared.<br>Change radius and search again.</div>';
+  function fullClearWorship(forceCacheClear = false){
+    placeMarkers.worship.forEach(function(m){ 
+      if(m && maps.worship.hasLayer(m)) maps.worship.removeLayer(m); 
+    });
+    placeMarkers.worship = [];
+
+    if(userMarkers.worship){ 
+      maps.worship.removeLayer(userMarkers.worship); 
+      userMarkers.worship = null; 
+    }
+
+    g('nmbd-worship-count').textContent = '';
+    g('nmbd-worship-badge').textContent = 'Ready — search again';
+    g('nmbd-worship-locinfo').innerHTML = '';
+    g('nmbd-worship-list').innerHTML = 
+      '<div class="nmbd-status"><div class="nmbd-status-icon">🕌</div>Session cleared.<br>Change radius and search again.</div>';
+
     maps.worship.setView([23.8103,90.4125],13);
+
+    if(forceCacheClear){
+      Object.keys(_cache).forEach(key => {
+        if(key.includes('place_of_worship')) delete _cache[key];
+      });
+    }
   }
 
-  function fullClearATM(){
-    placeMarkers.atm.forEach(function(m){ maps.atm.removeLayer(m); });
-    placeMarkers.atm=[];
-    if(userMarkers.atm){ maps.atm.removeLayer(userMarkers.atm); userMarkers.atm=null; }
-    g('nmbd-atm-count').textContent='';
-    g('nmbd-atm-badge').textContent='Ready — search again';
-    g('nmbd-atm-locinfo').innerHTML='';
-    g('nmbd-atm-list').innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🏧</div>Session cleared.<br>Change radius and search again.</div>';
+  function fullClearATM(forceCacheClear = false){
+    placeMarkers.atm.forEach(function(m){ 
+      if(m && maps.atm.hasLayer(m)) maps.atm.removeLayer(m); 
+    });
+    placeMarkers.atm = [];
+
+    if(userMarkers.atm){ 
+      maps.atm.removeLayer(userMarkers.atm); 
+      userMarkers.atm = null; 
+    }
+
+    g('nmbd-atm-count').textContent = '';
+    g('nmbd-atm-badge').textContent = 'Ready — search again';
+    g('nmbd-atm-locinfo').innerHTML = '';
+    g('nmbd-atm-list').innerHTML = 
+      '<div class="nmbd-status"><div class="nmbd-status-icon">🏧</div>Session cleared.<br>Change radius or bank and search again.</div>';
+
     maps.atm.setView([23.8103,90.4125],14);
+
+    if(forceCacheClear){
+      Object.keys(_cache).forEach(key => {
+        if(key.includes('amenity="atm') || key.includes('amenity="bank')) delete _cache[key];
+      });
+    }
   }
 
-  /* ══════════════════════════════════════════════════════════
-     LOCATION
-  ══════════════════════════════════════════════════════════ */
+  /* ==================== LOCATION ==================== */
+  var _inIframe = (function(){ try{ return window.self!==window.top; }catch(e){ return true; } })();
   var _locResolve=null, _locReject=null, _locFallbackTimer=null;
-  var _inIframe=(function(){ try{ return window.self!==window.top; }catch(e){ return true; } })();
 
   window.addEventListener('message',function(e){
-    var d=e.data;
-    if(!d||!d.type) return;
+    var d = e.data;
+    if(!d || !d.type) return;
     if(d.type==='nmbd-loc'){
       clearTimeout(_locFallbackTimer);
       if(_locResolve){ _locResolve({lat:d.lat,lon:d.lon,acc:d.acc||9999}); _locResolve=null; _locReject=null; }
@@ -364,28 +374,10 @@
   function rawGeolocate(){
     return new Promise(function(res,rej){
       if(!navigator.geolocation) return rej('Geolocation not supported');
-      var settled=false, freshTimer=null;
       navigator.geolocation.getCurrentPosition(
-        function(p){
-          if(settled) return;
-          var pos={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy||9999};
-          if(pos.acc<=300){ settled=true; clearTimeout(freshTimer); return res(pos); }
-          freshTimer=setTimeout(function(){ if(!settled){ settled=true; res(pos); } },3000);
-          navigator.geolocation.getCurrentPosition(
-            function(p2){ clearTimeout(freshTimer); if(!settled){ settled=true; res({lat:p2.coords.latitude,lon:p2.coords.longitude,acc:p2.coords.accuracy||9999}); } },
-            function(){   clearTimeout(freshTimer); if(!settled){ settled=true; res(pos); } },
-            {enableHighAccuracy:true,maximumAge:0,timeout:10000}
-          );
-        },
-        function(e){
-          if(settled) return;
-          navigator.geolocation.getCurrentPosition(
-            function(p){ if(!settled){ settled=true; res({lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy||9999}); } },
-            function(e2){ if(!settled){ settled=true; rej(e2.message||e.message||'Location denied'); } },
-            {enableHighAccuracy:true,maximumAge:0,timeout:15000}
-          );
-        },
-        {enableHighAccuracy:false,maximumAge:60000,timeout:8000}
+        function(p){ res({lat:p.coords.latitude, lon:p.coords.longitude, acc:p.coords.accuracy||9999}); },
+        function(e){ rej(e.message || 'Location denied'); },
+        {enableHighAccuracy:true, timeout:10000, maximumAge:0}
       );
     });
   }
@@ -394,427 +386,441 @@
     return new Promise(function(res,rej){
       if(!_inIframe) return rawGeolocate().then(res).catch(rej);
       if(_locResolve){ clearTimeout(_locFallbackTimer); _locResolve=null; _locReject=null; }
-      _locResolve=res; _locReject=rej;
+      _locResolve = res; _locReject = rej;
       postToParent({type:'nmbd-req-loc'});
-      _locFallbackTimer=setTimeout(function(){
-        if(!_locResolve) return;
-        _locResolve=null; _locReject=null;
-        rawGeolocate().then(res).catch(rej);
-      },2000);
+      _locFallbackTimer = setTimeout(function(){
+        if(_locResolve){ _locResolve = null; _locReject = null; rawGeolocate().then(res).catch(rej); }
+      }, 2000);
     });
   }
 
   function roundLoc(v){ return Math.round(v*1000)/1000; }
 
-  /* ══════════════════════════════════════════════════════════
-     OVERPASS
-  ══════════════════════════════════════════════════════════ */
-  var MIRRORS=[
+  /* ==================== OVERPASS ==================== */
+  var MIRRORS = [
     'https://overpass-api.de/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter',
     'https://overpass.private.coffee/api/interpreter',
     'https://overpass.osm.ch/api/interpreter'
   ];
-  var _cache={};
-  var TIMEOUT=28000, STAGGER=400, RETRY_WAIT=1500;
 
-  function tryMirror(url,body){
-    var ctrl=new AbortController();
-    var t=setTimeout(function(){ ctrl.abort(); },TIMEOUT);
-    return fetch(url,{method:'POST',body:body,mode:'cors',credentials:'omit',referrerPolicy:'no-referrer-when-downgrade',signal:ctrl.signal})
-      .then(function(r){ clearTimeout(t); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-      .then(function(d){ if(d.remark&&d.remark.indexOf('timeout')>-1) throw new Error('timeout'); if(!d.elements) throw new Error('bad response'); return d; })
-      .catch(function(e){ clearTimeout(t); throw e; });
+  function overpassQuery(q){
+    var now = Date.now();
+    if(_cache[q] && (now - _cache[q].ts) < 180000){
+      return Promise.resolve(_cache[q].data);
+    }
+
+    var body = 'data=' + encodeURIComponent(q);
+    return raceMirrors(body)
+      .then(function(d){
+        _cache[q] = {ts: Date.now(), data: d};
+        return d;
+      });
   }
 
-  function race(body){
-    return new Promise(function(resolve,reject){
-      var done=false,errs=[],timers=[];
-      function ok(d){ if(done) return; done=true; timers.forEach(clearTimeout); resolve(d); }
-      function fail(e){ errs.push(e); if(errs.length===MIRRORS.length&&!done){ done=true; reject(new Error('all mirrors failed')); } }
-      MIRRORS.forEach(function(url,i){
-        timers.push(setTimeout(function(){ tryMirror(url,body).then(ok).catch(fail); },i*STAGGER));
+  function raceMirrors(body){
+    return new Promise(function(resolve, reject){
+      var done = false;
+      MIRRORS.forEach(function(url, i){
+        setTimeout(function(){
+          if(done) return;
+          tryMirror(url, body)
+            .then(function(d){ if(!done){ done=true; resolve(d); } })
+            .catch(function(){});
+        }, i * 300);
       });
     });
   }
 
-  function overpassQuery(q, onRetry){
-    var now=Date.now();
-    if(_cache[q] && _cache[q].count>0 && (now-_cache[q].ts)<180000){
-      return Promise.resolve(_cache[q].data);
-    }
-    var body='data='+encodeURIComponent(q);
-    return race(body)
-      .then(function(d){
-        if(d.elements && d.elements.length>0){
-          _cache[q]={ts:Date.now(), data:d, count:d.elements.length};
-        }
-        return d;
-      })
-      .catch(function(){
-        if(onRetry) onRetry();
-        return new Promise(function(r){ setTimeout(r,RETRY_WAIT); })
-          .then(function(){ return race(body); })
-          .then(function(d){
-            if(d.elements && d.elements.length>0){
-              _cache[q]={ts:Date.now(), data:d, count:d.elements.length};
-            }
-            return d;
-          });
-      });
+  function tryMirror(url, body){
+    var ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 25000);
+    return fetch(url, {method:'POST', body:body, signal:ctrl.signal})
+      .then(r => r.ok ? r.json() : Promise.reject('HTTP '+r.status));
   }
 
-  /* ══════════════════════════════════════════════════════════
-     GOOGLE MAPS NAV
-     openGoogleMaps now requires `tab` so it can lock that tab
-     once navigation is successfully launched.
-  ══════════════════════════════════════════════════════════ */
-  function openGoogleMaps(dLat,dLon,dName,tab){
-    var toast=g('nmbd-gmaps-toast'),label=g('nmbd-gmaps-dest-label'),cancel=g('nmbd-gmaps-cancel');
-    label.textContent='Getting your location to navigate to: '+dName;
+  /* ==================== GOOGLE MAPS NAV ==================== */
+  function openGoogleMaps(dLat, dLon, dName, tab){
+    var toast = g('nmbd-gmaps-toast');
+    var label = g('nmbd-gmaps-dest-label');
+    var cancel = g('nmbd-gmaps-cancel');
+
+    label.textContent = 'Navigating to: ' + dName;
     toast.classList.add('visible');
-    var cancelled=false;
-    cancel.onclick=function(){ cancelled=true; toast.classList.remove('visible'); hideLocPrompt(); };
-    showLocPrompt();
+
+    var cancelled = false;
+    cancel.onclick = function(){ cancelled=true; toast.classList.remove('visible'); };
+
     getLocation().then(function(loc){
-      hideLocPrompt(); if(cancelled) return; toast.classList.remove('visible');
-      var url='https://www.google.com/maps/dir/?api=1&origin='+loc.lat+','+loc.lon+'&destination='+dLat+','+dLon+'&travelmode=walking';
-      window.open(url,'_blank');
-      // ← Lock this tab: show the clear banner, disable search
+      if(cancelled) return;
+      toast.classList.remove('visible');
+      var url = `https://www.google.com/maps/dir/?api=1&origin=${loc.lat},${loc.lon}&destination=${dLat},${dLon}&travelmode=walking`;
+      window.open(url, '_blank');
       if(tab) setNavActive(tab);
-    }).catch(function(err){
-      hideLocPrompt(); if(cancelled) return; toast.classList.remove('visible');
-      var fallback='https://www.google.com/maps/dir/?api=1&destination='+dLat+','+dLon+'&travelmode=walking';
-      if(confirm('Could not get your location ('+err+').\nOpen Google Maps with destination only?')){
-        window.open(fallback,'_blank');
+    }).catch(function(){
+      if(cancelled) return;
+      toast.classList.remove('visible');
+      var fallback = `https://www.google.com/maps/dir/?api=1&destination=${dLat},${dLon}&travelmode=walking`;
+      if(confirm('Could not get your exact location.\nOpen Google Maps with destination only?')){
+        window.open(fallback, '_blank');
         if(tab) setNavActive(tab);
       }
     });
   }
 
-  /* ══════════════════════════════════════════════════════════
-     MAPS INIT
-  ══════════════════════════════════════════════════════════ */
+  /* ==================== MAP INIT ==================== */
   function initMaps(){
-    var tile='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var opt={attribution:'© OpenStreetMap',maxZoom:19};
-    maps.worship=L.map('nmbd-map-worship',{zoomControl:true}).setView([23.8103,90.4125],13);
-    L.tileLayer(tile,opt).addTo(maps.worship);
-    maps.atm=L.map('nmbd-map-atm',{zoomControl:true}).setView([23.8103,90.4125],14);
-    L.tileLayer(tile,opt).addTo(maps.atm);
+    var tile = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var opt = {attribution: '© OpenStreetMap', maxZoom:19};
+
+    maps.worship = L.map('nmbd-map-worship').setView([23.8103,90.4125],13);
+    L.tileLayer(tile, opt).addTo(maps.worship);
+
+    maps.atm = L.map('nmbd-map-atm').setView([23.8103,90.4125],14);
+    L.tileLayer(tile, opt).addTo(maps.atm);
   }
 
   function switchTab(tab){
     ['worship','atm'].forEach(function(t){
-      g('nmbd-tab-'+t).classList.toggle('active',t===tab);
-      g('nmbd-panel-'+t).classList.toggle('active',t===tab);
+      g('nmbd-tab-'+t).classList.toggle('active', t===tab);
+      g('nmbd-panel-'+t).classList.toggle('active', t===tab);
     });
-    setTimeout(function(){ maps[tab]&&maps[tab].invalidateSize(); },80);
+    setTimeout(() => maps[tab] && maps[tab].invalidateSize(), 100);
   }
 
   function haversine(lat1,lon1,lat2,lon2){
-    var R=6371000,d=Math.PI/180,dLat=(lat2-lat1)*d,dLon=(lon2-lon1)*d;
-    var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*d)*Math.cos(lat2*d)*Math.sin(dLon/2)*Math.sin(dLon/2);
-    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    var R=6371000, d=Math.PI/180;
+    var dLat=(lat2-lat1)*d, dLon=(lon2-lon1)*d;
+    var a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*d)*Math.cos(lat2*d)*Math.sin(dLon/2)*Math.sin(dLon/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
-  function fmtDist(m){ return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km'; }
 
-  function mkIcon(emoji,bg){
-    return L.divIcon({
-      html:'<div style="font-size:17px;background:'+bg+';width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3);box-shadow:0 2px 8px rgba(0,0,0,.5)">'+emoji+'</div>',
-      className:'',iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-15]
-    });
-  }
-  var WI={mosque:mkIcon('🕌','#2a5a3a'),hindu_temple:mkIcon('🛕','#7a3a00'),church:mkIcon('⛪','#3a3a7a'),buddhist:mkIcon('🪔','#5a4a00'),other:mkIcon('🏛','#3a3a3a')};
-  var ATM_ICON=mkIcon('🏧','#1a5a6a'), USER_ICON=mkIcon('👤','#0e6e6e');
+  function fmtDist(m){ return m<1000 ? Math.round(m)+'m' : (m/1000).toFixed(1)+'km'; }
+
+  var WI = {
+    mosque: L.divIcon({html:'<div style="font-size:17px;background:#2a5a3a;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)">🕌</div>', className:'', iconSize:[29,29], iconAnchor:[14,14]}),
+    hindu_temple: L.divIcon({html:'<div style="font-size:17px;background:#7a3a00;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)">🛕</div>', className:'', iconSize:[29,29], iconAnchor:[14,14]}),
+    church: L.divIcon({html:'<div style="font-size:17px;background:#3a3a7a;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)">⛪</div>', className:'', iconSize:[29,29], iconAnchor:[14,14]}),
+    buddhist: L.divIcon({html:'<div style="font-size:17px;background:#5a4a00;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)">🪔</div>', className:'', iconSize:[29,29], iconAnchor:[14,14]}),
+    other: L.divIcon({html:'<div style="font-size:17px;background:#3a3a3a;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)">🏛</div>', className:'', iconSize:[29,29], iconAnchor:[14,14]})
+  };
+
+  var ATM_ICON = L.divIcon({html:'<div style="font-size:17px;background:#1a5a6a;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)">🏧</div>', className:'', iconSize:[29,29], iconAnchor:[14,14]});
+  var USER_ICON = L.divIcon({html:'<div style="font-size:17px;background:#0e6e6e;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3)">👤</div>', className:'', iconSize:[29,29], iconAnchor:[14,14]});
 
   function classify(tags){
-    var r=(tags.religion||'').toLowerCase(),n=(tags.name||'').toLowerCase();
-    if(r.includes('islam')||r.includes('muslim')||n.includes('masjid')||n.includes('mosque')||n.includes('মসজিদ')) return 'mosque';
-    if(r.includes('hindu')||n.includes('mandir')||n.includes('মন্দির')) return 'hindu_temple';
-    if(r.includes('christ')||n.includes('church')||n.includes('চার্চ')) return 'church';
-    if(r.includes('buddh')||n.includes('pagoda')||n.includes('বৌদ্ধ')) return 'buddhist';
+    var r = (tags.religion||'').toLowerCase(), n = (tags.name||'').toLowerCase();
+    if(r.includes('islam') || n.includes('masjid') || n.includes('mosque') || n.includes('মসজিদ')) return 'mosque';
+    if(r.includes('hindu') || n.includes('mandir') || n.includes('মন্দির')) return 'hindu_temple';
+    if(r.includes('christ') || n.includes('church') || n.includes('চার্চ')) return 'church';
+    if(r.includes('buddh') || n.includes('pagoda') || n.includes('বৌদ্ধ')) return 'buddhist';
     return 'other';
   }
-  var WE={mosque:'🕌',hindu_temple:'🛕',church:'⛪',buddhist:'🪔',other:'🏛'};
-  var WL={mosque:'Mosque',hindu_temple:'Mandir / Temple',church:'Church',buddhist:'Pagoda / Buddhist',other:'Place of Worship'};
 
-  function showLocPrompt(){ var el=g('nmbd-loc-prompt'); if(el) el.classList.add('visible'); }
-  function hideLocPrompt(){ var el=g('nmbd-loc-prompt'); if(el) el.classList.remove('visible'); }
+  var WE = {mosque:'🕌', hindu_temple:'🛕', church:'⛪', buddhist:'🪔', other:'🏛'};
+  var WL = {mosque:'Mosque', hindu_temple:'Mandir / Temple', church:'Church', buddhist:'Pagoda / Buddhist', other:'Place of Worship'};
+
+  function showLocPrompt(){ g('nmbd-loc-prompt').classList.add('visible'); }
+  function hideLocPrompt(){ g('nmbd-loc-prompt').classList.remove('visible'); }
+
   function spin(){ return '<div style="width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:nmbd-spin .7s linear infinite;display:inline-block;vertical-align:middle"></div>'; }
 
-  function showError(list,badge,retryFn){
-    badge.textContent='Error';
-    list.innerHTML=
-      '<div style="padding:9px">'+
-        '<div class="nmbd-err">⚠️ Map servers are busy right now.'+
-          '<div class="nmbd-err-detail">Tried all 4 servers twice. Usually clears in under a minute.</div>'+
-        '</div>'+
-        '<button class="nmbd-retry-btn" id="nmbd-manual-retry">🔄 Try Again</button>'+
-      '</div>';
-    var b=document.getElementById('nmbd-manual-retry');
-    if(b) b.addEventListener('click',retryFn);
+  function showError(list, badge, retryFn){
+    badge.textContent = 'Error';
+    list.innerHTML = `<div style="padding:9px"><div class="nmbd-err">⚠️ Map servers are busy.<div class="nmbd-err-detail">Please try again in a moment.</div></div><button class="nmbd-retry-btn" id="nmbd-manual-retry">🔄 Try Again</button></div>`;
+    document.getElementById('nmbd-manual-retry').onclick = retryFn;
   }
 
-  function popupNavBtn(id,dLat,dLon,dName){
-    return '<button id="'+id+'" style="margin-top:6px;width:100%;padding:5px;background:#1a7340;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🗺️ Open in Google Maps</button>';
-  }
-
-  /* ══ SOFT CLEAR HELPERS (mid-search reset, no UI reset) ══ */
-  function clearWorship(){
-    placeMarkers.worship.forEach(function(m){ maps.worship.removeLayer(m); });
-    placeMarkers.worship=[];
-    if(userMarkers.worship){ maps.worship.removeLayer(userMarkers.worship); userMarkers.worship=null; }
-    g('nmbd-worship-count').textContent='';
-    g('nmbd-worship-badge').textContent='Searching…';
-    g('nmbd-worship-list').innerHTML='';
-  }
-  function clearATM(){
-    placeMarkers.atm.forEach(function(m){ maps.atm.removeLayer(m); });
-    placeMarkers.atm=[];
-    if(userMarkers.atm){ maps.atm.removeLayer(userMarkers.atm); userMarkers.atm=null; }
-    g('nmbd-atm-count').textContent='';
-    g('nmbd-atm-badge').textContent='Searching…';
-    g('nmbd-atm-list').innerHTML='';
-  }
-
-  /* ══ WORSHIP SEARCH ══ */
+  /* ==================== WORSHIP SEARCH ==================== */
   function searchWorship(){
-    // Guard: block if nav is still active (shouldn't be reachable but safety net)
     if(_navActive.worship) return;
 
-    var btn=g('nmbd-worship-btn'), list=g('nmbd-worship-list'), badge=g('nmbd-worship-badge'), li=g('nmbd-worship-locinfo');
-    var types=[];
-    document.querySelectorAll('#nmbd-worship-chips .nmbd-chip.on').forEach(function(c){ types.push(c.dataset.type); });
+    var btn = g('nmbd-worship-btn');
+    var list = g('nmbd-worship-list');
+    var badge = g('nmbd-worship-badge');
+    var li = g('nmbd-worship-locinfo');
+
+    var types = [];
+    document.querySelectorAll('#nmbd-worship-chips .nmbd-chip.on').forEach(c => types.push(c.dataset.type));
+
     if(!types.length){
-      list.innerHTML='<div style="padding:9px"><div class="nmbd-err">⚠️ Select at least one type.</div></div>';
+      list.innerHTML = '<div style="padding:9px"><div class="nmbd-err">Please select at least one worship type.</div></div>';
       return;
     }
 
-    btn.disabled=true;
-    btn.innerHTML=spin()+' Locating…';
-    clearWorship();
-    list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
-    showLocPrompt();
+    btn.disabled = true;
+    btn.innerHTML = spin() + ' Locating…';
 
-    var radius=parseInt(g('nmbd-worship-radius').value,10);
+    // Soft clear
+    placeMarkers.worship.forEach(m => { if(m && maps.worship.hasLayer(m)) maps.worship.removeLayer(m); });
+    placeMarkers.worship = [];
+    if(userMarkers.worship){ maps.worship.removeLayer(userMarkers.worship); userMarkers.worship = null; }
+
+    list.innerHTML = '<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
+
+    var radius = parseInt(g('nmbd-worship-radius').value, 10);
+
+    showLocPrompt();
 
     getLocation()
       .then(function(loc){
         hideLocPrompt();
-        var lat=roundLoc(loc.lat), lon=roundLoc(loc.lon);
-        li.innerHTML='<div class="nmbd-loc-pill">✅ '+lat+', '+lon+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
-        list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
+        var lat = roundLoc(loc.lat), lon = roundLoc(loc.lon);
+        li.innerHTML = `<div class="nmbd-loc-pill">✅ ${lat}, ${lon} (±${Math.round(loc.acc)}m)</div>`;
 
-        var q='[out:json][timeout:30][maxsize:2097152];node["amenity"="place_of_worship"](around:'+radius+','+lat+','+lon+');out;';
-        return overpassQuery(q, function(){
-          list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
-        }).then(function(d){
-          var places=(d.elements||[]).map(function(el){
-            var lt=el.lat||(el.center&&el.center.lat), ln=el.lon||(el.center&&el.center.lon);
-            if(!lt||!ln) return null;
-            var tp=classify(el.tags||{});
-            return {id:el.id,lat:lt,lon:ln,type:tp,dist:haversine(lat,lon,lt,ln),tags:el.tags||{}};
-          }).filter(function(p){ return p&&types.indexOf(p.type)>-1; });
-          places.sort(function(a,b){ return a.dist-b.dist; });
-          renderWorship(places,{lat:lat,lon:lon},radius);
+        list.innerHTML = `<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within ${fmtDist(radius)}…</div>`;
+
+        var q = `[out:json][timeout:30];node["amenity"="place_of_worship"](around:${radius},${lat},${lon});out;`;
+
+        return overpassQuery(q).then(function(d){
+          var places = (d.elements||[]).map(el => {
+            var lt = el.lat || (el.center && el.center.lat);
+            var ln = el.lon || (el.center && el.center.lon);
+            if(!lt || !ln) return null;
+            var tp = classify(el.tags||{});
+            return {id:el.id, lat:lt, lon:ln, type:tp, dist:haversine(lat,lon,lt,ln), tags:el.tags||{}};
+          }).filter(p => p && types.includes(p.type));
+
+          places.sort((a,b) => a.dist - b.dist);
+          renderWorship(places, {lat:lat, lon:lon}, radius);
         });
       })
       .catch(function(err){
         hideLocPrompt();
-        if(typeof err==='string'&&(err.indexOf('denied')>-1||err.indexOf('not supported')>-1)){
-          list.innerHTML='<div style="padding:9px"><div class="nmbd-err">📍 Location permission denied.<div class="nmbd-err-detail">Please allow location access in your browser settings and try again.</div></div></div>';
-          badge.textContent='No location';
+        if(err.toString().includes('denied')){
+          list.innerHTML = `<div style="padding:9px"><div class="nmbd-err">📍 Location access denied.<br>Please allow location permission.</div></div>`;
         } else {
-          showError(list,badge,function(){ btn.disabled=false; searchWorship(); });
+          showError(list, badge, () => { btn.disabled=false; searchWorship(); });
         }
       })
-      .then(function(){
-        btn.disabled=false;
-        btn.innerHTML='📍 Find Nearby Worship Places';
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = '📍 Find Nearby Worship Places';
       });
   }
 
-  function renderWorship(places,loc,radius){
-    var map=maps.worship, list=g('nmbd-worship-list'), ct=g('nmbd-worship-count'), badge=g('nmbd-worship-badge');
-    placeMarkers.worship.forEach(function(m){ map.removeLayer(m); }); placeMarkers.worship=[];
-    if(userMarkers.worship) map.removeLayer(userMarkers.worship);
-    userMarkers.worship=L.marker([loc.lat,loc.lon],{icon:USER_ICON}).addTo(map).bindPopup('<b>📍 You are here</b>');
+  function renderWorship(places, loc, radius){
+    var map = maps.worship, list = g('nmbd-worship-list'), ct = g('nmbd-worship-count'), badge = g('nmbd-worship-badge');
 
     if(!places.length){
-      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No results within '+fmtDist(radius)+'.<div class="nmbd-status-sub">Try increasing the radius slider and searching again.</div></div>';
-      ct.textContent=''; badge.textContent='No results';
-      map.setView([loc.lat,loc.lon],14); return;
+      list.innerHTML = `<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No worship places found within ${fmtDist(radius)}.<br>Try increasing radius.</div>`;
+      ct.textContent = '';
+      badge.textContent = 'No results';
+      map.setView([loc.lat, loc.lon], 14);
+      return;
     }
 
-    ct.innerHTML='Found <b>'+places.length+'</b> places';
-    badge.innerHTML='<span>'+places.length+'</span> found';
-    list.innerHTML='';
+    ct.innerHTML = `Found <b>${places.length}</b> places`;
+    badge.innerHTML = `<span>${places.length}</span> found`;
 
-    places.forEach(function(p,i){
-      var name=p.tags.name||p.tags['name:en']||WL[p.type];
-      var addr=[p.tags['addr:street'],p.tags['addr:city']].filter(Boolean).join(', ');
-      var sn=name.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      var card=document.createElement('div'); card.className='nmbd-card';
-      card.innerHTML=
-        '<div class="nmbd-ctop">'+
-          '<div class="nmbd-cicon">'+WE[p.type]+'</div>'+
-          '<div style="flex:1">'+
-            '<div class="nmbd-cname">'+sn+'</div>'+
-            '<div class="nmbd-ctype">'+WL[p.type]+'</div>'+
-            (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
-          '</div>'+
-          '<div class="nmbd-cdist">'+fmtDist(p.dist)+'</div>'+
-        '</div>'+
-        '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🗺️ Open in Google Maps</button></div>';
-      // ← Pass 'worship' as tab
-      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){ e.stopPropagation(); openGoogleMaps(p.lat,p.lon,name,'worship'); });
-      card.addEventListener('click',function(){
-        document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
-        card.classList.add('active-card'); map.setView([p.lat,p.lon],17); placeMarkers.worship[i].openPopup();
+    list.innerHTML = '';
+    placeMarkers.worship = [];
+
+    userMarkers.worship = L.marker([loc.lat, loc.lon], {icon: USER_ICON}).addTo(map)
+      .bindPopup('<b>📍 You are here</b>');
+
+    places.forEach(function(p, i){
+      var name = p.tags.name || p.tags['name:en'] || WL[p.type];
+      var addr = [p.tags['addr:street'], p.tags['addr:city']].filter(Boolean).join(', ');
+
+      var card = document.createElement('div');
+      card.className = 'nmbd-card';
+      card.innerHTML = `
+        <div class="nmbd-ctop">
+          <div class="nmbd-cicon">${WE[p.type]}</div>
+          <div style="flex:1">
+            <div class="nmbd-cname">${name.replace(/</g,'&lt;')}</div>
+            <div class="nmbd-ctype">${WL[p.type]}</div>
+            ${addr ? `<div class="nmbd-caddr">📍 ${addr}</div>` : ''}
+          </div>
+          <div class="nmbd-cdist">${fmtDist(p.dist)}</div>
+        </div>
+        <div class="nmbd-cactions"><button class="nmbd-nav-btn">🗺️ Open in Google Maps</button></div>
+      `;
+
+      card.querySelector('.nmbd-nav-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        openGoogleMaps(p.lat, p.lon, name, 'worship');
       });
+
+      card.addEventListener('click', () => {
+        document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(c => c.classList.remove('active-card'));
+        card.classList.add('active-card');
+        map.setView([p.lat, p.lon], 17);
+        placeMarkers.worship[i].openPopup();
+      });
+
       list.appendChild(card);
 
-      var popId='nmbd-mpop-w'+p.id;
-      var mk=L.marker([p.lat,p.lon],{icon:WI[p.type]||WI.other}).addTo(map)
-        .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+WL[p.type]+'</small><br><small style="color:#e8c96e">'+fmtDist(p.dist)+' away</small><br>'+popupNavBtn(popId,p.lat,p.lon,name));
-      mk.on('popupopen',function(){
-        var b=document.getElementById(popId);
-        if(b) b.onclick=function(){ openGoogleMaps(p.lat,p.lon,name,'worship'); };
+      var mk = L.marker([p.lat, p.lon], {icon: WI[p.type] || WI.other}).addTo(map)
+        .bindPopup(`<b>${name}</b><br><small style="color:#12908f">${WL[p.type]}</small><br><small style="color:#e8c96e">${fmtDist(p.dist)} away</small><br><button onclick="openGoogleMaps(${p.lat},${p.lon},'${name.replace(/'/g,"\\\'")}','worship')">🗺️ Open in Google Maps</button>`);
+
+      mk.on('click', () => {
+        document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(c => c.classList.remove('active-card'));
+        card.classList.add('active-card');
+        card.scrollIntoView({behavior:'smooth', block:'nearest'});
       });
-      mk.on('click',function(){
-        document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
-        card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
-      });
+
       placeMarkers.worship.push(mk);
     });
-    maps.worship.fitBounds(L.featureGroup([userMarkers.worship].concat(placeMarkers.worship)).getBounds().pad(0.15));
+
+    map.fitBounds(L.featureGroup([userMarkers.worship].concat(placeMarkers.worship)).getBounds().pad(0.15));
   }
 
-  /* ══ ATM SEARCH ══ */
+  /* ==================== ATM SEARCH ==================== */
   function searchATM(){
     if(_navActive.atm) return;
 
-    var btn=g('nmbd-atm-btn'), list=g('nmbd-atm-list'), badge=g('nmbd-atm-badge'), li=g('nmbd-atm-locinfo');
-    var bf=(g('nmbd-bank-filter').value||'').toLowerCase();
+    var btn = g('nmbd-atm-btn');
+    var list = g('nmbd-atm-list');
+    var badge = g('nmbd-atm-badge');
+    var li = g('nmbd-atm-locinfo');
+    var bf = (g('nmbd-bank-filter').value || '').toLowerCase();
 
-    btn.disabled=true;
-    btn.innerHTML=spin()+' Locating…';
-    clearATM();
-    list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
+    btn.disabled = true;
+    btn.innerHTML = spin() + ' Locating…';
+
+    placeMarkers.atm.forEach(m => { if(m && maps.atm.hasLayer(m)) maps.atm.removeLayer(m); });
+    placeMarkers.atm = [];
+    if(userMarkers.atm){ maps.atm.removeLayer(userMarkers.atm); userMarkers.atm = null; }
+
+    list.innerHTML = '<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
+
+    var radius = parseInt(g('nmbd-atm-radius').value, 10);
+
     showLocPrompt();
-
-    var radius=parseInt(g('nmbd-atm-radius').value,10);
 
     getLocation()
       .then(function(loc){
         hideLocPrompt();
-        var lat=roundLoc(loc.lat), lon=roundLoc(loc.lon);
-        li.innerHTML='<div class="nmbd-loc-pill">✅ '+lat+', '+lon+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
-        list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
+        var lat = roundLoc(loc.lat), lon = roundLoc(loc.lon);
+        li.innerHTML = `<div class="nmbd-loc-pill">✅ ${lat}, ${lon} (±${Math.round(loc.acc)}m)</div>`;
 
-        var q='[out:json][timeout:30][maxsize:2097152];(node["amenity"="atm"](around:'+radius+','+lat+','+lon+');node["amenity"="bank"](around:'+radius+','+lat+','+lon+'););out;';
-        return overpassQuery(q, function(){
-          list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
-        }).then(function(d){
-          var atms=(d.elements||[]).map(function(e){
-            if(!e.lat||!e.lon) return null;
-            var t=e.tags||{}, nm=t.operator||t.name||t.brand||'Unknown Bank';
-            return {id:e.id,lat:e.lat,lon:e.lon,name:nm,dist:haversine(lat,lon,e.lat,e.lon),tags:t,type:t.amenity};
-          }).filter(function(a){ return a&&(!bf||a.name.toLowerCase().includes(bf)); });
-          atms.sort(function(a,b){ return a.dist-b.dist; });
-          renderATM(atms,{lat:lat,lon:lon},bf,radius);
+        list.innerHTML = `<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within ${fmtDist(radius)}…</div>`;
+
+        var q = `[out:json][timeout:30];(node["amenity"="atm"](around:${radius},${lat},${lon});node["amenity"="bank"](around:${radius},${lat},${lon}););out;`;
+
+        return overpassQuery(q).then(function(d){
+          var atms = (d.elements||[]).map(e => {
+            if(!e.lat || !e.lon) return null;
+            var t = e.tags || {};
+            var nm = t.operator || t.name || t.brand || 'Unknown';
+            return {id:e.id, lat:e.lat, lon:e.lon, name:nm, dist:haversine(lat,lon,e.lat,e.lon), tags:t, type:t.amenity};
+          }).filter(a => a && (!bf || a.name.toLowerCase().includes(bf)));
+
+          atms.sort((a,b) => a.dist - b.dist);
+          renderATM(atms, {lat:lat, lon:lon}, bf, radius);
         });
       })
       .catch(function(err){
         hideLocPrompt();
-        if(typeof err==='string'&&(err.indexOf('denied')>-1||err.indexOf('not supported')>-1)){
-          list.innerHTML='<div style="padding:9px"><div class="nmbd-err">📍 Location permission denied.<div class="nmbd-err-detail">Please allow location access in your browser settings and try again.</div></div></div>';
-          badge.textContent='No location';
+        if(err.toString().includes('denied')){
+          list.innerHTML = `<div style="padding:9px"><div class="nmbd-err">📍 Location access denied.<br>Please allow location permission.</div></div>`;
         } else {
-          showError(list,badge,function(){ btn.disabled=false; searchATM(); });
+          showError(list, badge, () => { btn.disabled=false; searchATM(); });
         }
       })
-      .then(function(){
-        btn.disabled=false;
-        btn.innerHTML='📍 Find Nearby ATMs';
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = '📍 Find Nearby ATMs';
       });
   }
 
-  function renderATM(atms,loc,bf,radius){
-    var map=maps.atm, list=g('nmbd-atm-list'), ct=g('nmbd-atm-count'), badge=g('nmbd-atm-badge');
-    placeMarkers.atm.forEach(function(m){ map.removeLayer(m); }); placeMarkers.atm=[];
-    if(userMarkers.atm) map.removeLayer(userMarkers.atm);
-    userMarkers.atm=L.marker([loc.lat,loc.lon],{icon:USER_ICON}).addTo(map).bindPopup('<b>📍 You are here</b>');
+  function renderATM(atms, loc, bf, radius){
+    var map = maps.atm, list = g('nmbd-atm-list'), ct = g('nmbd-atm-count'), badge = g('nmbd-atm-badge');
 
     if(!atms.length){
-      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No ATMs found'+(bf?' for this bank':'')+' within '+fmtDist(radius)+'.<div class="nmbd-status-sub">Try increasing the radius or selecting All Banks.</div></div>';
-      ct.textContent=''; badge.textContent='No ATMs';
-      map.setView([loc.lat,loc.lon],15); return;
+      list.innerHTML = `<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No ATMs found${bf?' for selected bank':''} within ${fmtDist(radius)}.</div>`;
+      ct.textContent = '';
+      badge.textContent = 'No results';
+      map.setView([loc.lat, loc.lon], 15);
+      return;
     }
 
-    ct.innerHTML='Found <b>'+atms.length+'</b> ATMs';
-    badge.innerHTML='<span>'+atms.length+'</span> ATMs';
-    list.innerHTML='';
+    ct.innerHTML = `Found <b>${atms.length}</b> ATMs`;
+    badge.innerHTML = `<span>${atms.length}</span> ATMs`;
 
-    atms.forEach(function(a,i){
-      var isATM=a.type==='atm';
-      var addr=[a.tags['addr:street'],a.tags['addr:city']].filter(Boolean).join(', ');
-      var sn=a.name.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      var card=document.createElement('div'); card.className='nmbd-card';
-      card.innerHTML=
-        '<div class="nmbd-ctop">'+
-          '<div class="nmbd-cicon">'+(isATM?'🏧':'🏦')+'</div>'+
-          '<div style="flex:1">'+
-            '<div class="nmbd-cname">'+sn+'</div>'+
-            '<div class="nmbd-ctype">'+(isATM?'ATM Booth':'Bank Branch')+'</div>'+
-            (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
-          '</div>'+
-          '<div class="nmbd-cdist">'+fmtDist(a.dist)+'</div>'+
-        '</div>'+
-        '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🗺️ Open in Google Maps</button></div>';
-      // ← Pass 'atm' as tab
-      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){ e.stopPropagation(); openGoogleMaps(a.lat,a.lon,a.name,'atm'); });
-      card.addEventListener('click',function(){
-        document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
-        card.classList.add('active-card'); map.setView([a.lat,a.lon],18); placeMarkers.atm[i].openPopup();
+    list.innerHTML = '';
+    placeMarkers.atm = [];
+
+    userMarkers.atm = L.marker([loc.lat, loc.lon], {icon: USER_ICON}).addTo(map)
+      .bindPopup('<b>📍 You are here</b>');
+
+    atms.forEach(function(a, i){
+      var isATM = a.type === 'atm';
+      var addr = [a.tags['addr:street'], a.tags['addr:city']].filter(Boolean).join(', ');
+      var sn = a.name.replace(/</g,'&lt;');
+
+      var card = document.createElement('div');
+      card.className = 'nmbd-card';
+      card.innerHTML = `
+        <div class="nmbd-ctop">
+          <div class="nmbd-cicon">${isATM?'🏧':'🏦'}</div>
+          <div style="flex:1">
+            <div class="nmbd-cname">${sn}</div>
+            <div class="nmbd-ctype">${isATM?'ATM Booth':'Bank Branch'}</div>
+            ${addr ? `<div class="nmbd-caddr">📍 ${addr}</div>` : ''}
+          </div>
+          <div class="nmbd-cdist">${fmtDist(a.dist)}</div>
+        </div>
+        <div class="nmbd-cactions"><button class="nmbd-nav-btn">🗺️ Open in Google Maps</button></div>
+      `;
+
+      card.querySelector('.nmbd-nav-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        openGoogleMaps(a.lat, a.lon, a.name, 'atm');
       });
+
+      card.addEventListener('click', () => {
+        document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(c => c.classList.remove('active-card'));
+        card.classList.add('active-card');
+        map.setView([a.lat, a.lon], 18);
+        placeMarkers.atm[i].openPopup();
+      });
+
       list.appendChild(card);
 
-      var popId='nmbd-mpop-a'+a.id;
-      var mk=L.marker([a.lat,a.lon],{icon:ATM_ICON}).addTo(map)
-        .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+(isATM?'🏧 ATM':'🏦 Bank')+'</small><br><small style="color:#e8c96e">'+fmtDist(a.dist)+' away</small><br>'+popupNavBtn(popId,a.lat,a.lon,a.name));
-      mk.on('popupopen',function(){
-        var b=document.getElementById(popId);
-        if(b) b.onclick=function(){ openGoogleMaps(a.lat,a.lon,a.name,'atm'); };
+      var mk = L.marker([a.lat, a.lon], {icon: ATM_ICON}).addTo(map)
+        .bindPopup(`<b>${sn}</b><br><small style="color:#12908f">${isATM?'ATM':'Bank'}</small><br><small style="color:#e8c96e">${fmtDist(a.dist)} away</small><br><button onclick="openGoogleMaps(${a.lat},${a.lon},'${a.name.replace(/'/g,"\\\'")}','atm')">🗺️ Open in Google Maps</button>`);
+
+      mk.on('click', () => {
+        document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(c => c.classList.remove('active-card'));
+        card.classList.add('active-card');
+        card.scrollIntoView({behavior:'smooth', block:'nearest'});
       });
-      mk.on('click',function(){
-        document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
-        card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
-      });
+
       placeMarkers.atm.push(mk);
     });
-    maps.atm.fitBounds(L.featureGroup([userMarkers.atm].concat(placeMarkers.atm)).getBounds().pad(0.15));
+
+    map.fitBounds(L.featureGroup([userMarkers.atm].concat(placeMarkers.atm)).getBounds().pad(0.15));
   }
 
-  /* ══ INIT ══ */
+  /* ==================== INIT ==================== */
   ready(function(){
-    if(typeof L==='undefined'){ console.error('NearMe BD: Leaflet not loaded.'); return; }
+    if(typeof L === 'undefined'){ console.error('Leaflet not loaded'); return; }
+
     initMaps();
-    g('nmbd-tab-worship').addEventListener('click',function(){ switchTab('worship'); });
-    g('nmbd-tab-atm').addEventListener('click',    function(){ switchTab('atm'); });
+
+    g('nmbd-tab-worship').addEventListener('click', () => switchTab('worship'));
+    g('nmbd-tab-atm').addEventListener('click', () => switchTab('atm'));
+
     g('nmbd-worship-btn').addEventListener('click', searchWorship);
-    g('nmbd-atm-btn').addEventListener('click',     searchATM);
+    g('nmbd-atm-btn').addEventListener('click', searchATM);
 
-    // ── Clear navigation buttons
-    g('nmbd-navclear-worship-btn').addEventListener('click',function(){ clearNavActive('worship'); });
-    g('nmbd-navclear-atm-btn').addEventListener('click',    function(){ clearNavActive('atm'); });
+    g('nmbd-navclear-worship-btn').addEventListener('click', () => clearNavActive('worship'));
+    g('nmbd-navclear-atm-btn').addEventListener('click', () => clearNavActive('atm'));
 
-    document.querySelectorAll('#nmbd-worship-chips .nmbd-chip').forEach(function(c){
-      c.addEventListener('click',function(){ c.classList.toggle('on'); });
+    document.querySelectorAll('#nmbd-worship-chips .nmbd-chip').forEach(c => {
+      c.addEventListener('click', () => c.classList.toggle('on'));
     });
-    g('nmbd-worship-radius').addEventListener('input',function(){ g('nmbd-worship-rval').textContent=Math.round(this.value/1000*10)/10+'km'; });
-    g('nmbd-atm-radius').addEventListener('input',    function(){ g('nmbd-atm-rval').textContent=Math.round(this.value/1000*10)/10+'km'; });
+
+    g('nmbd-worship-radius').addEventListener('input', function(){
+      g('nmbd-worship-rval').textContent = (this.value/1000).toFixed(1) + 'km';
+    });
+
+    g('nmbd-atm-radius').addEventListener('input', function(){
+      g('nmbd-atm-rval').textContent = (this.value/1000).toFixed(1) + 'km';
+    });
   });
 
 })(window,document);
