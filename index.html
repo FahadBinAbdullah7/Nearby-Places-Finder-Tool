@@ -71,8 +71,6 @@
 #nmbd-root .nmbd-card:hover{border-color:var(--gold-dim);background:var(--surface2)}
 #nmbd-root .nmbd-card:hover::before,#nmbd-root .nmbd-card.active-card::before{opacity:1}
 #nmbd-root .nmbd-card.active-card{border-color:var(--gold);background:var(--surface2)}
-#nmbd-root .nmbd-card.nav-active{border-color:var(--nav-light)!important;background:rgba(21,101,192,.12)!important}
-#nmbd-root .nmbd-card.nav-active::before{background:var(--nav-light)!important;opacity:1!important}
 #nmbd-root .nmbd-ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:7px}
 #nmbd-root .nmbd-cicon{font-size:1.15rem;flex-shrink:0}
 #nmbd-root .nmbd-cname{font-size:0.84rem;font-weight:600;color:var(--text);flex:1;line-height:1.3}
@@ -80,8 +78,16 @@
 #nmbd-root .nmbd-ctype{font-size:0.65rem;color:var(--teal-light);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
 #nmbd-root .nmbd-caddr{font-size:0.7rem;color:var(--text-muted);margin-top:3px;line-height:1.4}
 #nmbd-root .nmbd-cactions{display:flex;gap:6px;margin-top:8px}
-#nmbd-root .nmbd-nav-btn{flex:1;padding:6px 10px;border-radius:7px;border:none;font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:600;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:5px;background:linear-gradient(135deg,var(--nav),#1976D2);color:#fff;box-shadow:0 2px 10px rgba(21,101,192,.3)}
-#nmbd-root .nmbd-nav-btn:hover{opacity:.88;box-shadow:0 2px 16px rgba(21,101,192,.5)}
+/* Google Maps nav button — green to match Maps brand */
+#nmbd-root .nmbd-nav-btn{
+  flex:1;padding:6px 10px;border-radius:7px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:600;
+  cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  background:linear-gradient(135deg,#1a7340,#22a35c);color:#fff;
+  box-shadow:0 2px 10px rgba(26,115,64,.35);
+}
+#nmbd-root .nmbd-nav-btn:hover{opacity:.88;box-shadow:0 2px 16px rgba(26,115,64,.55)}
 #nmbd-root .nmbd-status{padding:26px 16px;text-align:center;color:var(--text-muted);font-size:0.79rem;line-height:1.6}
 #nmbd-root .nmbd-status-icon{font-size:2rem;margin-bottom:7px}
 #nmbd-root .nmbd-spinner{width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:nmbd-spin .7s linear infinite;margin:0 auto 9px}
@@ -94,46 +100,6 @@
 #nmbd-root .nmbd-map{width:100%;height:100%}
 #nmbd-root .nmbd-badge{position:absolute;top:10px;right:10px;z-index:500;background:rgba(10,15,15,.9);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:0.7rem;color:var(--text-muted);backdrop-filter:blur(6px);pointer-events:none}
 #nmbd-root .nmbd-badge span{color:var(--gold-light);font-weight:600}
-#nmbd-root .nmbd-hud{position:absolute;bottom:0;left:0;right:0;z-index:800;background:rgba(11,18,18,.97);border-top:2px solid var(--nav-light);backdrop-filter:blur(18px);display:none;box-shadow:0 -6px 32px rgba(66,165,245,.2)}
-#nmbd-root .nmbd-hud-row{display:flex;align-items:center;padding:10px 14px;gap:0}
-#nmbd-root .nmbd-hud-live{display:flex;align-items:center;gap:7px;padding-right:14px;border-right:1px solid var(--border)}
-#nmbd-root .nmbd-live-dot{width:9px;height:9px;border-radius:50%;background:var(--nav-light);animation:nmbd-blink 1.2s ease-in-out infinite}
-@keyframes nmbd-blink{0%,100%{opacity:1}50%{opacity:.2}}
-#nmbd-root .nmbd-hud-live-lbl{font-size:0.67rem;color:var(--nav-light);font-weight:600;text-transform:uppercase;letter-spacing:.07em}
-#nmbd-root .nmbd-hstat{flex:1;text-align:center;padding:0 4px}
-#nmbd-root .nmbd-hstat-val{font-size:1.05rem;font-weight:700;color:var(--text)}
-#nmbd-root .nmbd-hstat-lbl{font-size:0.59rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:1px}
-#nmbd-root .nmbd-hdivider{width:1px;height:28px;background:var(--border)}
-#nmbd-root .nmbd-hdest{flex:2;padding:0 12px;overflow:hidden}
-#nmbd-root .nmbd-hdest-name{font-size:0.78rem;font-weight:600;color:var(--gold-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#nmbd-root .nmbd-hdest-lbl{font-size:0.59rem;color:var(--text-muted);margin-top:1px}
-#nmbd-root .nmbd-stop-btn{background:rgba(224,85,85,.12);border:1px solid var(--nav-stop);color:var(--nav-stop);border-radius:7px;padding:7px 12px;font-size:0.73rem;font-weight:600;cursor:pointer;transition:background .18s;flex-shrink:0}
-#nmbd-root .nmbd-stop-btn:hover{background:rgba(224,85,85,.28)}
-#nmbd-root .nmbd-nav-badge{position:absolute;top:10px;left:10px;z-index:600;background:rgba(11,18,18,.92);border:1px solid var(--nav-light);border-radius:8px;padding:5px 10px;font-size:0.7rem;color:var(--nav-light);display:none;align-items:center;gap:6px;animation:nmbd-pulse-border 2s ease-in-out infinite}
-@keyframes nmbd-pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(66,165,245,.4)}50%{box-shadow:0 0 0 5px rgba(66,165,245,0)}}
-#nmbd-root .nmbd-reroute-toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:900;background:rgba(11,18,18,.96);border:1px solid var(--gold);border-radius:12px;padding:13px 20px;font-size:0.82rem;color:var(--gold-light);display:none;text-align:center;pointer-events:none;white-space:nowrap}
-#nmbd-root .nmbd-arrived-toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:950;background:linear-gradient(135deg,#0d4a0d,#1a7a1a);border:1px solid #4caf7a;border-radius:14px;padding:18px 28px;font-size:0.95rem;color:#b8ffb8;text-align:center;pointer-events:none;transition:transform .3s ease;font-weight:600}
-#nmbd-root .nmbd-arrived-toast.show{transform:translate(-50%,-50%) scale(1)}
-#nmbd-root .nmbd-live-user-dot{width:14px;height:14px;border-radius:50%;background:#42A5F5;border:2.5px solid #fff;box-shadow:0 0 0 4px rgba(66,165,245,.3);animation:nmbd-live-pulse 1.8s ease-in-out infinite}
-@keyframes nmbd-live-pulse{0%,100%{box-shadow:0 0 0 4px rgba(66,165,245,.25)}50%{box-shadow:0 0 0 10px rgba(66,165,245,0)}}
-#nmbd-root .leaflet-popup-content-wrapper{background:var(--surface2)!important;color:var(--text)!important;border:1px solid var(--border)!important;border-radius:10px!important;box-shadow:0 8px 30px rgba(0,0,0,.6)!important}
-#nmbd-root .leaflet-popup-tip{background:var(--surface2)!important}
-#nmbd-root .leaflet-popup-content{font-family:'DM Sans',sans-serif!important;font-size:0.79rem!important}
-/* ── Mobile nav-mode: sidebar hidden, map fills screen ── */
-#nmbd-root .nmbd-panel.nav-mode .nmbd-sidebar{display:none!important}
-#nmbd-root .nmbd-panel.nav-mode .nmbd-map-area{height:100vh!important}
-/* Back-to-list floating button (only shown in nav-mode on mobile) */
-#nmbd-back-btn{
-  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-  z-index:2000;display:none;
-  background:rgba(10,15,15,.95);border:1px solid var(--gold);
-  color:var(--gold-light);border-radius:24px;
-  padding:10px 22px;font-family:'DM Sans',sans-serif;
-  font-size:0.82rem;font-weight:600;cursor:pointer;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);white-space:nowrap;
-}
-#nmbd-back-btn.visible{display:block}
-
 /* ── Location prompt banner ── */
 #nmbd-loc-prompt{
   position:fixed;top:0;left:0;right:0;z-index:3000;
@@ -149,55 +115,37 @@
 #nmbd-loc-prompt .nlp-text b{display:block;font-size:0.86rem;margin-bottom:2px;color:#fff}
 #nmbd-loc-prompt .nlp-text span{font-size:0.74rem;color:#b8e0e0}
 
-/* ── Desktop-mode hint toast ── */
-#nmbd-desktop-hint{
+/* ── "Opening Google Maps…" overlay ── */
+#nmbd-gmaps-toast{
   position:fixed;top:50%;left:50%;
   transform:translate(-50%,-50%) scale(0);
-  z-index:3000;
-  background:#0e1a1a;
-  border:2px solid #c9a84c;border-radius:14px;
-  padding:22px 24px;max-width:300px;width:92%;
+  z-index:4000;
+  background:#0e1a1a;border:2px solid #22a35c;border-radius:14px;
+  padding:22px 28px;max-width:280px;width:90%;
   font-family:'DM Sans',sans-serif;text-align:center;
   box-shadow:0 8px 40px rgba(0,0,0,.85);
-  transition:transform .25s ease;
-  /* dim backdrop */
+  transition:transform .22s ease;
 }
-#nmbd-desktop-hint.visible{transform:translate(-50%,-50%) scale(1)}
-/* semi-transparent backdrop behind the modal */
-#nmbd-desktop-hint.visible::before{
-  content:'';position:fixed;inset:0;
-  background:rgba(0,0,0,.65);z-index:-1;
+#nmbd-gmaps-toast.visible{transform:translate(-50%,-50%) scale(1)}
+#nmbd-gmaps-toast.visible::before{
+  content:'';position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:-1;
 }
-#nmbd-desktop-hint .ndh-icon{font-size:2.2rem;margin-bottom:10px;display:block}
-#nmbd-desktop-hint .ndh-title{
-  font-size:1rem;font-weight:700;
-  color:#e8c96e;          /* gold-light — hardcoded, outside #nmbd-root */
-  margin-bottom:10px;display:block;
+#nmbd-gmaps-toast .ngt-icon{font-size:2.2rem;margin-bottom:8px;display:block}
+#nmbd-gmaps-toast .ngt-title{font-size:0.95rem;font-weight:700;color:#4cdf8a;display:block;margin-bottom:6px}
+#nmbd-gmaps-toast .ngt-body{font-size:0.76rem;color:#c0d8d8;line-height:1.5;display:block;margin-bottom:16px}
+#nmbd-gmaps-toast .ngt-cancel{
+  background:transparent;border:1px solid #2a3f3f;
+  border-radius:8px;color:#7a9a9a;
+  font-family:'DM Sans',sans-serif;font-size:0.78rem;
+  padding:8px 18px;cursor:pointer;
 }
-#nmbd-desktop-hint .ndh-body{
-  font-size:0.78rem;
-  color:#c0d8d8;          /* light teal-white — readable on dark bg */
-  line-height:1.6;margin-bottom:18px;display:block;
-}
-#nmbd-desktop-hint .ndh-body b{
-  color:#e8eded;          /* brighter white for the bold part */
-  font-weight:600;
-}
-#nmbd-desktop-hint .ndh-ok{
-  background:linear-gradient(135deg,#0e6e6e,#12908f);
-  border:none;border-radius:8px;color:#fff;
-  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
-  padding:11px 24px;cursor:pointer;width:100%;
-  box-shadow:0 2px 10px rgba(18,144,143,.4);
-}
+#nmbd-gmaps-toast .ngt-cancel:hover{border-color:#7a9a9a;color:#e8eded}
+
 @media(max-width:700px){
   #nmbd-root .nmbd-panel.active{flex-direction:column;height:auto}
   #nmbd-root .nmbd-sidebar{width:100%;min-width:unset;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}
   #nmbd-root .nmbd-map-area{height:60vh;min-height:320px}
-  #nmbd-root .nmbd-hud-live{display:none}
-  #nmbd-root .leaflet-bottom.leaflet-right{bottom:58px}
   #nmbd-root .nmbd-nav-btn{padding:10px 12px;font-size:0.82rem}
-  #nmbd-root .nmbd-stop-btn{padding:10px 14px}
 }
 </style>
 </head>
@@ -209,7 +157,7 @@
       <div class="nmbd-logo-icon">🕌</div>
       <div>
         <div class="nmbd-logo-text">NearMe BD</div>
-        <div class="nmbd-logo-sub">Worship &amp; ATM Locator · Live Navigation</div>
+        <div class="nmbd-logo-sub">Worship &amp; ATM Locator · Google Maps Navigation</div>
       </div>
     </div>
   </header>
@@ -246,20 +194,6 @@
     <div class="nmbd-map-area">
       <div class="nmbd-map" id="nmbd-map-worship"></div>
       <div class="nmbd-badge" id="nmbd-worship-badge">Click search to load</div>
-      <div class="nmbd-nav-badge" id="nmbd-worship-navbadge"><div class="nmbd-live-dot"></div>&nbsp;Live Navigation</div>
-      <div class="nmbd-hud" id="nmbd-worship-hud">
-        <div class="nmbd-hud-row">
-          <div class="nmbd-hud-live"><div class="nmbd-live-dot"></div><div class="nmbd-hud-live-lbl">Live</div></div>
-          <div class="nmbd-hstat"><div class="nmbd-hstat-val" id="nmbd-worship-rdist">–</div><div class="nmbd-hstat-lbl">Remaining</div></div>
-          <div class="nmbd-hdivider"></div>
-          <div class="nmbd-hstat"><div class="nmbd-hstat-val" id="nmbd-worship-eta">–</div><div class="nmbd-hstat-lbl">ETA (walk)</div></div>
-          <div class="nmbd-hdivider"></div>
-          <div class="nmbd-hdest"><div class="nmbd-hdest-name" id="nmbd-worship-dest">–</div><div class="nmbd-hdest-lbl">Destination</div></div>
-          <button class="nmbd-stop-btn" id="nmbd-worship-stopbtn">✕ Stop</button>
-        </div>
-      </div>
-      <div class="nmbd-reroute-toast" id="nmbd-worship-reroute">🔄 Rerouting…</div>
-      <div class="nmbd-arrived-toast" id="nmbd-worship-arrived">🎉 You have arrived!</div>
     </div>
   </div>
 
@@ -315,27 +249,10 @@
     <div class="nmbd-map-area">
       <div class="nmbd-map" id="nmbd-map-atm"></div>
       <div class="nmbd-badge" id="nmbd-atm-badge">Click search to load</div>
-      <div class="nmbd-nav-badge" id="nmbd-atm-navbadge"><div class="nmbd-live-dot"></div>&nbsp;Live Navigation</div>
-      <div class="nmbd-hud" id="nmbd-atm-hud">
-        <div class="nmbd-hud-row">
-          <div class="nmbd-hud-live"><div class="nmbd-live-dot"></div><div class="nmbd-hud-live-lbl">Live</div></div>
-          <div class="nmbd-hstat"><div class="nmbd-hstat-val" id="nmbd-atm-rdist">–</div><div class="nmbd-hstat-lbl">Remaining</div></div>
-          <div class="nmbd-hdivider"></div>
-          <div class="nmbd-hstat"><div class="nmbd-hstat-val" id="nmbd-atm-eta">–</div><div class="nmbd-hstat-lbl">ETA (walk)</div></div>
-          <div class="nmbd-hdivider"></div>
-          <div class="nmbd-hdest"><div class="nmbd-hdest-name" id="nmbd-atm-dest">–</div><div class="nmbd-hdest-lbl">Destination</div></div>
-          <button class="nmbd-stop-btn" id="nmbd-atm-stopbtn">✕ Stop</button>
-        </div>
-      </div>
-      <div class="nmbd-reroute-toast" id="nmbd-atm-reroute">🔄 Rerouting…</div>
-      <div class="nmbd-arrived-toast" id="nmbd-atm-arrived">🎉 You have arrived!</div>
     </div>
   </div>
 
 </div>
-
-<!-- floating back-to-list button for mobile nav -->
-<button id="nmbd-back-btn">← Back to List</button>
 
 <!-- location permission prompt banner -->
 <div id="nmbd-loc-prompt">
@@ -346,15 +263,12 @@
   </div>
 </div>
 
-<!-- desktop mode hint toast (shown on mobile when Navigate Here is tapped) -->
-<div id="nmbd-desktop-hint">
-  <div class="ndh-icon">🖥️</div>
-  <div class="ndh-title">Enable Desktop Mode</div>
-  <div class="ndh-body">
-    For the best navigation experience on mobile, please enable
-    <b>Desktop Site / Desktop View</b> in your browser menu before navigating.
-  </div>
-  <button class="ndh-ok" id="nmbd-desktop-ok">Got it — Navigate Anyway</button>
+<!-- "Opening Google Maps…" confirmation toast -->
+<div id="nmbd-gmaps-toast">
+  <span class="ngt-icon">🗺️</span>
+  <span class="ngt-title">Opening Google Maps…</span>
+  <span class="ngt-body" id="nmbd-gmaps-dest-label">Getting your location to start navigation.</span>
+  <button class="ngt-cancel" id="nmbd-gmaps-cancel">Cancel</button>
 </div>
 
 <script>
@@ -364,9 +278,108 @@
   function g(id){ return document.getElementById(id); }
   function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
 
-  var maps={}, userMarkers={worship:null,atm:null}, placeMarkers={worship:[],atm:[]}, rerouteLock={worship:false,atm:false};
-  function mkState(){ return {routeLayer:null,casingLayer:null,destMarker:null,liveMarker:null,accCircle:null,watchId:null,active:false,destLat:0,destLon:0,destName:''}; }
-  var ns={worship:mkState(),atm:mkState()};
+  var maps={}, userMarkers={worship:null,atm:null}, placeMarkers={worship:[],atm:[]};
+
+  /* ══════════════════════════════════════════════════════════
+     LOCATION via postMessage (falls back to direct geolocation)
+  ══════════════════════════════════════════════════════════ */
+  var _locResolve = null, _locReject = null;
+  var _locFallbackTimer = null;
+
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    if(!d || !d.type) return;
+    if(d.type === 'nmbd-loc'){
+      clearTimeout(_locFallbackTimer);
+      if(_locResolve){ _locResolve({lat:d.lat, lon:d.lon}); _locResolve=null; _locReject=null; }
+    }
+    if(d.type === 'nmbd-loc-err'){
+      clearTimeout(_locFallbackTimer);
+      if(_locReject){ _locReject(d.msg||'Location denied'); _locResolve=null; _locReject=null; }
+    }
+  });
+
+  function postToParent(msg){
+    try{ window.parent.postMessage(msg,'*'); }catch(e){}
+  }
+
+  function getLocation(){
+    return new Promise(function(res,rej){
+      _locResolve=res; _locReject=rej;
+      postToParent({type:'nmbd-req-loc'});
+      _locFallbackTimer=setTimeout(function(){
+        if(!_locResolve) return;
+        _locResolve=null; _locReject=null;
+        if(!navigator.geolocation) return rej('Geolocation not supported');
+        navigator.geolocation.getCurrentPosition(
+          function(p){ res({lat:p.coords.latitude,lon:p.coords.longitude}); },
+          function(e){ rej(e.message||'Location denied'); },
+          {enableHighAccuracy:true,maximumAge:0,timeout:15000}
+        );
+      }, 2000);
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     GOOGLE MAPS NAVIGATION
+     Opens Google Maps with walking directions from the user's
+     current location to the destination.
+     URL format:
+       https://www.google.com/maps/dir/?api=1
+         &origin=LAT,LON          ← user's GPS location
+         &destination=LAT,LON     ← the place / ATM
+         &travelmode=walking
+  ══════════════════════════════════════════════════════════ */
+  var _gmapsPending = null; /* stores {dLat,dLon,dName} while waiting for GPS */
+
+  function openGoogleMaps(dLat, dLon, dName){
+    /* Show the "Opening Google Maps…" toast while we fetch GPS */
+    var toast  = g('nmbd-gmaps-toast');
+    var label  = g('nmbd-gmaps-dest-label');
+    var cancel = g('nmbd-gmaps-cancel');
+
+    label.textContent = 'Getting your location to navigate to: ' + dName;
+    toast.classList.add('visible');
+
+    var cancelled = false;
+    cancel.onclick = function(){
+      cancelled = true;
+      toast.classList.remove('visible');
+      hideLocPrompt();
+    };
+
+    showLocPrompt();
+
+    getLocation().then(function(loc){
+      hideLocPrompt();
+      if(cancelled) return;
+      toast.classList.remove('visible');
+
+      /* Build the Google Maps directions URL */
+      var url = 'https://www.google.com/maps/dir/?api=1'
+              + '&origin='      + loc.lat + ',' + loc.lon
+              + '&destination=' + dLat    + ',' + dLon
+              + '&travelmode=walking';
+
+      /* Open in a new tab/window — works on desktop & mobile */
+      window.open(url, '_blank');
+
+    }).catch(function(err){
+      hideLocPrompt();
+      if(cancelled) return;
+      toast.classList.remove('visible');
+
+      /* If GPS fails, fall back to destination-only Google Maps link */
+      var fallback = 'https://www.google.com/maps/dir/?api=1'
+                   + '&destination=' + dLat + ',' + dLon
+                   + '&travelmode=walking';
+      if(confirm('Could not get your location (' + err + ').\nOpen Google Maps with destination only?')){
+        window.open(fallback, '_blank');
+      }
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════ */
 
   function initMaps(){
     var tile='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -385,124 +398,12 @@
     setTimeout(function(){ maps[tab]&&maps[tab].invalidateSize(); },80);
   }
 
-  /* ══════════════════════════════════════════════════════════
-     LOCATION via postMessage
-     
-     Why: when the iframe calls navigator.geolocation directly,
-     the browser permission prompt shows "github.io wants your
-     location". By routing through the PARENT page instead, the
-     prompt shows the parent domain (e.g. techperbyte.com).
-
-     How it works:
-       iframe  → postMessage({type:'nmbd-req-loc'})  → parent
-       parent  → navigator.geolocation.getCurrentPosition
-       parent  → postMessage({type:'nmbd-loc', lat, lon}) → iframe
-       iframe  ← resolves the Promise with {lat, lon}
-
-     watchPosition works the same way:
-       iframe  → nmbd-watch-start  → parent starts watchPosition
-       parent  → nmbd-watch-update → iframe receives each update
-       iframe  → nmbd-watch-stop   → parent clears the watch
-     
-     Fallback: if parent doesn't respond within 4s (e.g. direct
-     GitHub Pages access without the WP wrapper), we fall back to
-     calling geolocation directly inside the iframe.
-  ══════════════════════════════════════════════════════════ */
-
-  var _locResolve = null, _locReject = null;
-  var _watchCb    = null; /* callback for live watch updates */
-  var _locFallbackTimer = null;
-
-  /* Listen for messages from parent page */
-  window.addEventListener('message', function(e){
-    var d = e.data;
-    if(!d || !d.type) return;
-
-    if(d.type === 'nmbd-loc'){
-      /* Response to a one-time location request */
-      clearTimeout(_locFallbackTimer);
-      if(_locResolve){ _locResolve({lat: d.lat, lon: d.lon}); _locResolve = null; _locReject = null; }
-    }
-    if(d.type === 'nmbd-loc-err'){
-      clearTimeout(_locFallbackTimer);
-      if(_locReject){ _locReject(d.msg || 'Location denied'); _locResolve = null; _locReject = null; }
-    }
-    if(d.type === 'nmbd-watch-update'){
-      /* Continuous GPS updates during navigation */
-      if(_watchCb) _watchCb({coords:{latitude:d.lat,longitude:d.lon,accuracy:d.accuracy||20}});
-    }
-  });
-
-  function postToParent(msg){
-    try{ window.parent.postMessage(msg, '*'); }catch(e){}
-  }
-
-  function getLocation(){
-    return new Promise(function(res,rej){
-      _locResolve = res;
-      _locReject  = rej;
-
-      /* Ask parent first — parent calls geolocation so prompt shows
-         the WordPress domain name, not github.io */
-      postToParent({type:'nmbd-req-loc'});
-
-      /* Fallback: if parent doesn't reply in 2s (direct GitHub access
-         or parent script not loaded), call geolocation directly.
-         maximumAge:0 forces a FRESH GPS fix — prevents stale cached
-         location being returned silently (causes "no results" on mobile
-         because cached coords may be from a different city/area) */
-      _locFallbackTimer = setTimeout(function(){
-        if(!_locResolve) return; /* parent already responded */
-        _locResolve = null; _locReject = null;
-        if(!navigator.geolocation) return rej('Geolocation not supported');
-        navigator.geolocation.getCurrentPosition(
-          function(p){ res({lat:p.coords.latitude,lon:p.coords.longitude}); },
-          function(e){ rej(e.message||'Location denied'); },
-          {enableHighAccuracy:true, maximumAge:0, timeout:15000}
-        );
-      }, 2000);
-    });
-  }
-
-  /* Called by finishNav to start live GPS tracking */
-  function startWatch(cb){
-    _watchCb = cb;
-    postToParent({type:'nmbd-watch-start'});
-
-    /* Fallback: direct watchPosition if no parent response in 4s */
-    var gotUpdate = false;
-    var fallbackTimer = setTimeout(function(){
-      if(gotUpdate) return;
-      if(!navigator.geolocation) return;
-      navigator.geolocation.watchPosition(
-        function(pos){ _watchCb && _watchCb(pos); },
-        function(err){ console.warn('GPS fallback:', err.message); },
-        {enableHighAccuracy:true,maximumAge:1500,timeout:10000}
-      );
-    }, 4000);
-
-    /* Mark first update received so fallback doesn't double-fire */
-    var origCb = cb;
-    _watchCb = function(pos){
-      gotUpdate = true;
-      clearTimeout(fallbackTimer);
-      _watchCb = origCb; /* restore original cb */
-      origCb(pos);
-    };
-  }
-
-  function stopWatch(){
-    _watchCb = null;
-    postToParent({type:'nmbd-watch-stop'});
-  }
-
   function haversine(lat1,lon1,lat2,lon2){
     var R=6371000,d=Math.PI/180,dLat=(lat2-lat1)*d,dLon=(lon2-lon1)*d;
     var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*d)*Math.cos(lat2*d)*Math.sin(dLon/2)*Math.sin(dLon/2);
     return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
   }
   function fmtDist(m){ return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km'; }
-  function fmtTime(s){ var m=Math.round(s/60); return m<60?m+' min':Math.floor(m/60)+'h '+(m%60)+'m'; }
 
   function mkIcon(emoji,bg){
     return L.divIcon({
@@ -510,9 +411,8 @@
       className:'',iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-15]
     });
   }
-  function mkLiveIcon(){ return L.divIcon({html:'<div class="nmbd-live-user-dot"></div>',className:'',iconSize:[14,14],iconAnchor:[7,7]}); }
   var WI={mosque:mkIcon('🕌','#2a5a3a'),hindu_temple:mkIcon('🛕','#7a3a00'),church:mkIcon('⛪','#3a3a7a'),buddhist:mkIcon('🪔','#5a4a00'),other:mkIcon('🏛','#3a3a3a')};
-  var ATM_ICON=mkIcon('🏧','#1a5a6a'),DEST_ICON=mkIcon('📌','#c9a84c'),USER_ICON=mkIcon('👤','#0e6e6e');
+  var ATM_ICON=mkIcon('🏧','#1a5a6a'),USER_ICON=mkIcon('👤','#0e6e6e');
 
   function classify(tags){
     var r=(tags.religion||'').toLowerCase(),n=(tags.name||'').toLowerCase();
@@ -525,14 +425,7 @@
   var WE={mosque:'🕌',hindu_temple:'🛕',church:'⛪',buddhist:'🪔',other:'🏛'};
   var WL={mosque:'Mosque',hindu_temple:'Mandir / Temple',church:'Church',buddhist:'Pagoda / Buddhist',other:'Place of Worship'};
 
-  /* ══════════════════════════════════════════════════════════
-     OVERPASS — 4 fixes vs previous version:
-     1. Timeout 8s → 15s   (BD→EU latency can be 8-12s)
-     2. Staggered start     (600ms apart → avoids rate limits)
-     3. Better mirrors      (private.coffee + osm.ch replace
-                             the two unreliable ones)
-     4. Auto-retry once     (2s pause then fresh race)
-  ══════════════════════════════════════════════════════════ */
+  /* Overpass mirrors */
   var MIRRORS=[
     'https://overpass-api.de/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter',
@@ -553,11 +446,11 @@
 
   function race(body){
     return new Promise(function(resolve,reject){
-      var done=false, errs=[], timers=[];
+      var done=false,errs=[],timers=[];
       function ok(d){ if(done) return; done=true; timers.forEach(clearTimeout); resolve(d); }
       function fail(e){ errs.push(e); if(errs.length===MIRRORS.length&&!done){ done=true; reject(new Error('all failed')); } }
       MIRRORS.forEach(function(url,i){
-        timers.push(setTimeout(function(){ tryMirror(url,body).then(ok).catch(fail); }, i*STAGGER));
+        timers.push(setTimeout(function(){ tryMirror(url,body).then(ok).catch(fail); },i*STAGGER));
       });
     });
   }
@@ -576,173 +469,13 @@
       });
   }
 
-  function fetchRoute(fLat,fLon,tLat,tLon){
-    var url='https://router.project-osrm.org/route/v1/foot/'+fLon+','+fLat+';'+tLon+','+tLat+'?overview=full&geometries=geojson';
-    var ctrl=new AbortController(), t=setTimeout(function(){ ctrl.abort(); },10000);
-    return fetch(url,{credentials:'omit',referrerPolicy:'no-referrer-when-downgrade',signal:ctrl.signal})
-      .then(function(r){ clearTimeout(t); return r.json(); })
-      .then(function(d){ if(d.code!=='Ok'||!d.routes.length) throw new Error('no route'); return d.routes[0]; })
-      .catch(function(e){ clearTimeout(t); throw e; });
-  }
-
-  function stopNav(tab){
-    var s=ns[tab],map=maps[tab];
-    s.active=false;
-    if(s.watchId){ stopWatch(); s.watchId=null; }
-    [s.routeLayer,s.casingLayer,s.destMarker,s.liveMarker,s.accCircle].forEach(function(l){ if(l) map.removeLayer(l); });
-    s.routeLayer=s.casingLayer=s.destMarker=s.liveMarker=s.accCircle=null;
-    g('nmbd-'+tab+'-hud').style.display='none';
-    g('nmbd-'+tab+'-navbadge').style.display='none';
-    rerouteLock[tab]=false;
-    document.querySelectorAll('#nmbd-panel-'+tab+' .nmbd-card').forEach(function(c){ c.classList.remove('nav-active','active-card'); });
-    /* Restore mobile layout */
-    g('nmbd-panel-'+tab).classList.remove('nav-mode');
-    var backBtn=document.getElementById('nmbd-back-btn');
-    if(backBtn) backBtn.classList.remove('visible');
-    setTimeout(function(){ map.invalidateSize(); },100);
-  }
-
-  function startNav(tab,dLat,dLon,dName,cardEl){
-    stopNav('worship'); stopNav('atm');
-    var s=ns[tab],map=maps[tab];
-    s.destLat=dLat; s.destLon=dLon; s.destName=dName; s.active=true;
-    document.querySelectorAll('.nmbd-card').forEach(function(c){ c.classList.remove('nav-active','active-card'); });
-    if(cardEl) cardEl.classList.add('nav-active');
-    getLocation().then(function(loc){
-      return fetchRoute(loc.lat,loc.lon,dLat,dLon).then(function(route){
-        var coords=route.geometry.coordinates.map(function(c){ return [c[1],c[0]]; });
-        s.routeLayer=L.polyline(coords,{color:'#42A5F5',weight:6,opacity:.88,lineCap:'round',lineJoin:'round'}).addTo(map);
-        s.casingLayer=L.polyline(coords,{color:'#1565C0',weight:11,opacity:.28,lineCap:'round'}).addTo(map);
-        finishNav(tab,loc,route);
-      }).catch(function(){
-        var coords=[[loc.lat,loc.lon],[dLat,dLon]];
-        s.routeLayer=L.polyline(coords,{color:'#42A5F5',weight:5,opacity:.8,dashArray:'8,6'}).addTo(map);
-        s.casingLayer=L.polyline(coords,{color:'#1565C0',weight:9,opacity:.25}).addTo(map);
-        finishNav(tab,loc,null);
-      });
-    }).catch(function(e){ alert('Cannot get location: '+e); s.active=false; });
-  }
-
-  function isMobile(){ return window.innerWidth <= 700; }
-
-  function finishNav(tab,loc,route){
-    var s=ns[tab],map=maps[tab];
-    s.destMarker=L.marker([s.destLat,s.destLon],{icon:DEST_ICON}).addTo(map).bindPopup('<b>📌 '+s.destName+'</b>');
-    s.liveMarker=L.marker([loc.lat,loc.lon],{icon:mkLiveIcon(),zIndexOffset:1000}).addTo(map);
-    s.accCircle=L.circle([loc.lat,loc.lon],{radius:20,color:'#42A5F5',fillColor:'#42A5F5',fillOpacity:.1,weight:1}).addTo(map);
-
-    g('nmbd-'+tab+'-hud').style.display='block';
-    g('nmbd-'+tab+'-navbadge').style.display='flex';
-    var dist=route?route.distance:haversine(loc.lat,loc.lon,s.destLat,s.destLon);
-    updateHUD(tab,dist,s.destName);
-
-    if(isMobile()){
-      /* On mobile: hide sidebar, give map full height, scroll page to top
-         so the map is immediately visible without any scrolling needed */
-      g('nmbd-panel-'+tab).classList.add('nav-mode');
-      var backBtn=document.getElementById('nmbd-back-btn');
-      if(backBtn){
-        backBtn.classList.add('visible');
-        backBtn.onclick=function(){
-          g('nmbd-panel-'+tab).classList.remove('nav-mode');
-          backBtn.classList.remove('visible');
-          map.invalidateSize();
-        };
-      }
-      /* Scroll the entire page to the top so the iframe map is in view */
-      try{ window.parent.scrollTo({top:0,behavior:'smooth'}); }catch(e){}
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
-
-    /* invalidateSize + fitBounds after layout settles */
-    setTimeout(function(){
-      map.invalidateSize();
-      if(s.routeLayer) map.fitBounds(s.routeLayer.getBounds().pad(0.12));
-      else map.setView([loc.lat,loc.lon],15);
-    }, 300);
-
-    startWatch(function(pos){ onUpdate(tab,pos); });
-    s.watchId = true;
-  }
-
-  /* Track last time user manually interacted with each map.
-     Auto-pan is suppressed for 10s after any drag/pinch/touch.
-     This stops the map from jumping back every GPS tick. */
-  var _lastUserInteraction = {worship:0, atm:0};
-
-  function bindMapInteraction(tab){
-    var map=maps[tab];
-    function markInteraction(){ _lastUserInteraction[tab]=Date.now(); }
-    map.on('dragstart',  markInteraction);
-    map.on('zoomstart',  markInteraction);
-    map.on('touchstart', markInteraction);
-  }
-
-  function onUpdate(tab,pos){
-    var s=ns[tab]; if(!s.active) return;
-    var lat=pos.coords.latitude,lon=pos.coords.longitude,map=maps[tab];
-    if(s.liveMarker) s.liveMarker.setLatLng([lat,lon]);
-    if(s.accCircle){ s.accCircle.setLatLng([lat,lon]); s.accCircle.setRadius(Math.max(pos.coords.accuracy||20,8)); }
-    var d=haversine(lat,lon,s.destLat,s.destLon);
-    if(d<25){ updateHUD(tab,0,s.destName); showArrived(tab); stopNav(tab); return; }
-    if(s.routeLayer&&!rerouteLock[tab]){
-      var pts=s.routeLayer.getLatLngs();
-      var md=pts.reduce(function(mn,p){ return Math.min(mn,haversine(lat,lon,p.lat,p.lng)); },Infinity);
-      if(md>90){
-        rerouteLock[tab]=true;
-        g('nmbd-'+tab+'-reroute').style.display='block';
-        fetchRoute(lat,lon,s.destLat,s.destLon).then(function(nr){
-          var nc=nr.geometry.coordinates.map(function(c){ return [c[1],c[0]]; });
-          s.routeLayer.setLatLngs(nc); s.casingLayer.setLatLngs(nc);
-          g('nmbd-'+tab+'-reroute').style.display='none'; rerouteLock[tab]=false;
-        }).catch(function(){ g('nmbd-'+tab+'-reroute').style.display='none'; rerouteLock[tab]=false; });
-      }
-    }
-    updateHUD(tab,d,s.destName);
-    /* Only auto-pan if user hasn't manually moved the map in the last 10 seconds */
-    var idleMs = Date.now() - _lastUserInteraction[tab];
-    if(idleMs > 10000){
-      map.panTo([lat,lon],{animate:true,duration:0.9,easeLinearity:0.5});
-    }
-  }
-
-  function updateHUD(tab,distM,dn){
-    g('nmbd-'+tab+'-rdist').textContent=fmtDist(distM);
-    g('nmbd-'+tab+'-eta').textContent=fmtTime(distM/1.2);
-    g('nmbd-'+tab+'-dest').textContent=dn;
-  }
-  function showArrived(tab){
-    var t=g('nmbd-'+tab+'-arrived'); t.classList.add('show');
-    setTimeout(function(){ t.classList.remove('show'); },3000);
-  }
-  /* Show/hide the location prompt banner */
+  /* Helpers */
   function showLocPrompt(){
-    var el=document.getElementById('nmbd-loc-prompt');
-    if(el) el.classList.add('visible');
+    var el=g('nmbd-loc-prompt'); if(el) el.classList.add('visible');
   }
   function hideLocPrompt(){
-    var el=document.getElementById('nmbd-loc-prompt');
-    if(el) el.classList.remove('visible');
+    var el=g('nmbd-loc-prompt'); if(el) el.classList.remove('visible');
   }
-
-  /* Show the desktop-mode hint on mobile, then run callback.
-     Tapping "Got it — Navigate Anyway" fires the callback immediately.
-     Auto-dismisses after 6s if user doesn't tap. */
-  function showDesktopHint(cb){
-    if(!isMobile()){ cb(); return; }
-    var overlay=document.getElementById('nmbd-desktop-hint');
-    var okBtn=document.getElementById('nmbd-desktop-ok');
-    if(!overlay){ cb(); return; }
-    overlay.classList.add('visible');
-    function proceed(){
-      overlay.classList.remove('visible');
-      clearTimeout(autoTimer);
-      cb();
-    }
-    if(okBtn) okBtn.onclick=proceed;
-    var autoTimer=setTimeout(proceed,6000);
-  }
-
   function spin(){ return '<div style="width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:nmbd-spin .7s linear infinite;display:inline-block;vertical-align:middle"></div>'; }
 
   function showError(list,badge,retryFn){
@@ -758,16 +491,20 @@
     if(b) b.addEventListener('click',retryFn);
   }
 
+  /* ── Popup nav button helper ── */
+  function popupNavBtn(id,dLat,dLon,dName){
+    return '<button id="'+id+'" style="margin-top:6px;width:100%;padding:5px;background:#1a7340;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🗺️ Open in Google Maps</button>';
+  }
+
+  /* ══ WORSHIP SEARCH ══ */
   function searchWorship(){
-    /* Stop any active navigation before starting a new search */
-    stopNav('worship'); stopNav('atm');
     var btn=g('nmbd-worship-btn'),list=g('nmbd-worship-list'),badge=g('nmbd-worship-badge'),li=g('nmbd-worship-locinfo');
     var types=[];
     document.querySelectorAll('#nmbd-worship-chips .nmbd-chip.on').forEach(function(c){ types.push(c.dataset.type); });
     if(!types.length){ list.innerHTML='<div style="padding:9px"><div class="nmbd-err">⚠️ Select at least one type.</div></div>'; return; }
     btn.disabled=true; btn.innerHTML=spin()+' Locating…';
     list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting location…</div>';
-    showLocPrompt(); /* tell user to allow location before browser prompt fires */
+    showLocPrompt();
     getLocation().then(function(loc){
       hideLocPrompt();
       li.innerHTML='<div class="nmbd-loc-pill">✅ '+loc.lat.toFixed(4)+', '+loc.lon.toFixed(4)+'</div>';
@@ -808,25 +545,46 @@
       var addr=[p.tags['addr:street'],p.tags['addr:city']].filter(Boolean).join(', ');
       var sn=name.replace(/</g,'&lt;').replace(/>/g,'&gt;');
       var card=document.createElement('div'); card.className='nmbd-card';
-      card.innerHTML='<div class="nmbd-ctop"><div class="nmbd-cicon">'+WE[p.type]+'</div>'+
-        '<div style="flex:1"><div class="nmbd-cname">'+sn+'</div><div class="nmbd-ctype">'+WL[p.type]+'</div>'+
-        (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
-        '</div><div class="nmbd-cdist">'+fmtDist(p.dist)+'</div></div>'+
-        '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🧭 Navigate Here</button></div>';
+      card.innerHTML=
+        '<div class="nmbd-ctop">'+
+          '<div class="nmbd-cicon">'+WE[p.type]+'</div>'+
+          '<div style="flex:1">'+
+            '<div class="nmbd-cname">'+sn+'</div>'+
+            '<div class="nmbd-ctype">'+WL[p.type]+'</div>'+
+            (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
+          '</div>'+
+          '<div class="nmbd-cdist">'+fmtDist(p.dist)+'</div>'+
+        '</div>'+
+        '<div class="nmbd-cactions">'+
+          '<button class="nmbd-nav-btn">🗺️ Open in Google Maps</button>'+
+        '</div>';
+
+      /* Card → Navigate button */
       card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){
         e.stopPropagation();
-        showDesktopHint(function(){ startNav('worship',p.lat,p.lon,name,card); });
+        openGoogleMaps(p.lat, p.lon, name);
       });
+
+      /* Card click → pan map + open popup */
       card.addEventListener('click',function(){
         document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); map.setView([p.lat,p.lon],17); placeMarkers.worship[i].openPopup();
       });
       list.appendChild(card);
+
+      /* Map marker */
+      var popId='nmbd-mpop-w'+p.id;
       var mk=L.marker([p.lat,p.lon],{icon:WI[p.type]||WI.other}).addTo(map)
-        .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+WL[p.type]+'</small><br>'+
+        .bindPopup(
+          '<b>'+sn+'</b><br>'+
+          '<small style="color:#12908f">'+WL[p.type]+'</small><br>'+
           '<small style="color:#e8c96e">'+fmtDist(p.dist)+' away</small><br>'+
-          '<button id="nmbd-mpop-w'+p.id+'" style="margin-top:6px;width:100%;padding:5px;background:#1565C0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🧭 Navigate Here</button>');
-      mk.on('popupopen',function(){ var b=document.getElementById('nmbd-mpop-w'+p.id); if(b) b.onclick=function(){ showDesktopHint(function(){ startNav('worship',p.lat,p.lon,name,card); }); }; });
+          popupNavBtn(popId,p.lat,p.lon,name)
+        );
+      mk.on('popupopen',function(){
+        var b=document.getElementById(popId);
+        if(b) b.onclick=function(){ openGoogleMaps(p.lat,p.lon,name); };
+      });
       mk.on('click',function(){
         document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -836,9 +594,8 @@
     maps.worship.fitBounds(L.featureGroup([userMarkers.worship].concat(placeMarkers.worship)).getBounds().pad(0.15));
   }
 
+  /* ══ ATM SEARCH ══ */
   function searchATM(){
-    /* Stop any active navigation before starting a new search */
-    stopNav('worship'); stopNav('atm');
     var btn=g('nmbd-atm-btn'),list=g('nmbd-atm-list'),badge=g('nmbd-atm-badge'),li=g('nmbd-atm-locinfo');
     var bf=(g('nmbd-bank-filter').value||'').toLowerCase();
     btn.disabled=true; btn.innerHTML=spin()+' Locating…';
@@ -883,25 +640,43 @@
       var addr=[a.tags['addr:street'],a.tags['addr:city']].filter(Boolean).join(', ');
       var sn=a.name.replace(/</g,'&lt;').replace(/>/g,'&gt;');
       var card=document.createElement('div'); card.className='nmbd-card';
-      card.innerHTML='<div class="nmbd-ctop"><div class="nmbd-cicon">'+(isATM?'🏧':'🏦')+'</div>'+
-        '<div style="flex:1"><div class="nmbd-cname">'+sn+'</div><div class="nmbd-ctype">'+(isATM?'ATM Booth':'Bank Branch')+'</div>'+
-        (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
-        '</div><div class="nmbd-cdist">'+fmtDist(a.dist)+'</div></div>'+
-        '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🧭 Navigate Here</button></div>';
+      card.innerHTML=
+        '<div class="nmbd-ctop">'+
+          '<div class="nmbd-cicon">'+(isATM?'🏧':'🏦')+'</div>'+
+          '<div style="flex:1">'+
+            '<div class="nmbd-cname">'+sn+'</div>'+
+            '<div class="nmbd-ctype">'+(isATM?'ATM Booth':'Bank Branch')+'</div>'+
+            (addr?'<div class="nmbd-caddr">📍 '+addr+'</div>':'')+
+          '</div>'+
+          '<div class="nmbd-cdist">'+fmtDist(a.dist)+'</div>'+
+        '</div>'+
+        '<div class="nmbd-cactions">'+
+          '<button class="nmbd-nav-btn">🗺️ Open in Google Maps</button>'+
+        '</div>';
+
       card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){
         e.stopPropagation();
-        showDesktopHint(function(){ startNav('atm',a.lat,a.lon,a.name,card); });
+        openGoogleMaps(a.lat, a.lon, a.name);
       });
+
       card.addEventListener('click',function(){
         document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); map.setView([a.lat,a.lon],18); placeMarkers.atm[i].openPopup();
       });
       list.appendChild(card);
+
+      var popId='nmbd-mpop-a'+a.id;
       var mk=L.marker([a.lat,a.lon],{icon:ATM_ICON}).addTo(map)
-        .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+(isATM?'🏧 ATM':'🏦 Bank')+'</small><br>'+
+        .bindPopup(
+          '<b>'+sn+'</b><br>'+
+          '<small style="color:#12908f">'+(isATM?'🏧 ATM':'🏦 Bank')+'</small><br>'+
           '<small style="color:#e8c96e">'+fmtDist(a.dist)+' away</small><br>'+
-          '<button id="nmbd-mpop-a'+a.id+'" style="margin-top:6px;width:100%;padding:5px;background:#1565C0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🧭 Navigate Here</button>');
-      mk.on('popupopen',function(){ var b=document.getElementById('nmbd-mpop-a'+a.id); if(b) b.onclick=function(){ showDesktopHint(function(){ startNav('atm',a.lat,a.lon,a.name,card); }); }; });
+          popupNavBtn(popId,a.lat,a.lon,a.name)
+        );
+      mk.on('popupopen',function(){
+        var b=document.getElementById(popId);
+        if(b) b.onclick=function(){ openGoogleMaps(a.lat,a.lon,a.name); };
+      });
       mk.on('click',function(){
         document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -914,14 +689,10 @@
   ready(function(){
     if(typeof L==='undefined'){ console.error('NearMe BD: Leaflet not loaded.'); return; }
     initMaps();
-    bindMapInteraction('worship');
-    bindMapInteraction('atm');
     g('nmbd-tab-worship').addEventListener('click',function(){ switchTab('worship'); });
     g('nmbd-tab-atm').addEventListener('click',    function(){ switchTab('atm'); });
     g('nmbd-worship-btn').addEventListener('click', searchWorship);
     g('nmbd-atm-btn').addEventListener('click',     searchATM);
-    g('nmbd-worship-stopbtn').addEventListener('click',function(){ stopNav('worship'); });
-    g('nmbd-atm-stopbtn').addEventListener('click',    function(){ stopNav('atm'); });
     document.querySelectorAll('#nmbd-worship-chips .nmbd-chip').forEach(function(c){
       c.addEventListener('click',function(){ c.classList.toggle('on'); });
     });
