@@ -14,7 +14,6 @@
 #nmbd-root{
   --gold:#c9a84c;--gold-light:#e8c96e;--gold-dim:#7a6030;
   --teal:#0e6e6e;--teal-light:#12908f;
-  --nav:#1565C0;--nav-light:#42A5F5;--nav-stop:#e05555;
   --bg:#0a0f0f;--bg2:#101818;--surface:#1a2828;--surface2:#1f3030;
   --border:#2a3f3f;--text:#e8eded;--text-muted:#7a9a9a;--green:#4caf7a;
   font-family:'DM Sans',sans-serif;
@@ -27,11 +26,7 @@
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23c9a84c' stroke-width='0.3' opacity='0.07'%3E%3Cpolygon points='40,2 52,14 52,26 40,38 28,26 28,14'/%3E%3Cpolygon points='40,42 52,54 52,66 40,78 28,66 28,54'/%3E%3Cpolygon points='2,22 14,10 26,22 14,34'/%3E%3Cpolygon points='54,22 66,10 78,22 66,34'/%3E%3C/g%3E%3C/svg%3E");
   pointer-events:none;z-index:0;
 }
-#nmbd-root .nmbd-header{
-  position:relative;z-index:10;padding:13px 22px 12px;
-  display:flex;align-items:center;gap:12px;
-  border-bottom:1px solid var(--border);background:rgba(10,15,15,0.97);
-}
+#nmbd-root .nmbd-header{position:relative;z-index:10;padding:13px 22px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:rgba(10,15,15,0.97)}
 #nmbd-root .nmbd-logo{display:flex;align-items:center;gap:10px}
 #nmbd-root .nmbd-logo-icon{width:33px;height:33px;background:linear-gradient(135deg,var(--gold),var(--teal-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
 #nmbd-root .nmbd-logo-text{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;background:linear-gradient(90deg,var(--gold-light),var(--teal-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -78,14 +73,7 @@
 #nmbd-root .nmbd-ctype{font-size:0.65rem;color:var(--teal-light);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
 #nmbd-root .nmbd-caddr{font-size:0.7rem;color:var(--text-muted);margin-top:3px;line-height:1.4}
 #nmbd-root .nmbd-cactions{display:flex;gap:6px;margin-top:8px}
-#nmbd-root .nmbd-nav-btn{
-  flex:1;padding:6px 10px;border-radius:7px;border:none;
-  font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:600;
-  cursor:pointer;transition:all .18s;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  background:linear-gradient(135deg,#1a7340,#22a35c);color:#fff;
-  box-shadow:0 2px 10px rgba(26,115,64,.35);
-}
+#nmbd-root .nmbd-nav-btn{flex:1;padding:6px 10px;border-radius:7px;border:none;font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:600;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:5px;background:linear-gradient(135deg,#1a7340,#22a35c);color:#fff;box-shadow:0 2px 10px rgba(26,115,64,.35)}
 #nmbd-root .nmbd-nav-btn:hover{opacity:.88;box-shadow:0 2px 16px rgba(26,115,64,.55)}
 #nmbd-root .nmbd-status{padding:26px 16px;text-align:center;color:var(--text-muted);font-size:0.79rem;line-height:1.6}
 #nmbd-root .nmbd-status-icon{font-size:2rem;margin-bottom:7px}
@@ -96,49 +84,24 @@
 #nmbd-root .nmbd-err-detail{font-size:0.66rem;color:var(--text-muted);margin-top:4px}
 #nmbd-root .nmbd-retry-btn{width:100%;margin-top:8px;padding:8px;background:var(--surface2);border:1px solid var(--gold-dim);border-radius:7px;color:var(--gold-light);font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:600;cursor:pointer;transition:border-color .18s,background .18s}
 #nmbd-root .nmbd-retry-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.08)}
-#nmbd-root .nmbd-expand-note{font-size:0.64rem;color:var(--gold-dim);background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.15);border-radius:6px;padding:4px 8px;margin-top:4px;display:inline-block}
 #nmbd-root .nmbd-map-area{flex:1;position:relative}
 #nmbd-root .nmbd-map{width:100%;height:100%}
 #nmbd-root .nmbd-badge{position:absolute;top:10px;right:10px;z-index:500;background:rgba(10,15,15,.9);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:0.7rem;color:var(--text-muted);backdrop-filter:blur(6px);pointer-events:none}
 #nmbd-root .nmbd-badge span{color:var(--gold-light);font-weight:600}
-#nmbd-loc-prompt{
-  position:fixed;top:0;left:0;right:0;z-index:3000;
-  background:linear-gradient(135deg,#0e4a4a,#12908f);
-  color:#e8eded;font-family:'DM Sans',sans-serif;
-  font-size:0.82rem;padding:12px 18px;
-  display:none;align-items:center;gap:10px;
-  box-shadow:0 3px 16px rgba(0,0,0,.5);
-}
+#nmbd-loc-prompt{position:fixed;top:0;left:0;right:0;z-index:3000;background:linear-gradient(135deg,#0e4a4a,#12908f);color:#e8eded;font-family:'DM Sans',sans-serif;font-size:0.82rem;padding:12px 18px;display:none;align-items:center;gap:10px;box-shadow:0 3px 16px rgba(0,0,0,.5)}
 #nmbd-loc-prompt.visible{display:flex}
 #nmbd-loc-prompt .nlp-icon{font-size:1.3rem;flex-shrink:0}
 #nmbd-loc-prompt .nlp-text{flex:1;line-height:1.4}
 #nmbd-loc-prompt .nlp-text b{display:block;font-size:0.86rem;margin-bottom:2px;color:#fff}
 #nmbd-loc-prompt .nlp-text span{font-size:0.74rem;color:#b8e0e0}
-#nmbd-gmaps-toast{
-  position:fixed;top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(0);
-  z-index:4000;
-  background:#0e1a1a;border:2px solid #22a35c;border-radius:14px;
-  padding:22px 28px;max-width:280px;width:90%;
-  font-family:'DM Sans',sans-serif;text-align:center;
-  box-shadow:0 8px 40px rgba(0,0,0,.85);
-  transition:transform .22s ease;
-}
+#nmbd-gmaps-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:4000;background:#0e1a1a;border:2px solid #22a35c;border-radius:14px;padding:22px 28px;max-width:280px;width:90%;font-family:'DM Sans',sans-serif;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.85);transition:transform .22s ease}
 #nmbd-gmaps-toast.visible{transform:translate(-50%,-50%) scale(1)}
-#nmbd-gmaps-toast.visible::before{
-  content:'';position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:-1;
-}
+#nmbd-gmaps-toast.visible::before{content:'';position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:-1}
 #nmbd-gmaps-toast .ngt-icon{font-size:2.2rem;margin-bottom:8px;display:block}
 #nmbd-gmaps-toast .ngt-title{font-size:0.95rem;font-weight:700;color:#4cdf8a;display:block;margin-bottom:6px}
 #nmbd-gmaps-toast .ngt-body{font-size:0.76rem;color:#c0d8d8;line-height:1.5;display:block;margin-bottom:16px}
-#nmbd-gmaps-toast .ngt-cancel{
-  background:transparent;border:1px solid #2a3f3f;
-  border-radius:8px;color:#7a9a9a;
-  font-family:'DM Sans',sans-serif;font-size:0.78rem;
-  padding:8px 18px;cursor:pointer;
-}
+#nmbd-gmaps-toast .ngt-cancel{background:transparent;border:1px solid #2a3f3f;border-radius:8px;color:#7a9a9a;font-family:'DM Sans',sans-serif;font-size:0.78rem;padding:8px 18px;cursor:pointer}
 #nmbd-gmaps-toast .ngt-cancel:hover{border-color:#7a9a9a;color:#e8eded}
-
 @media(max-width:700px){
   #nmbd-root .nmbd-panel.active{flex-direction:column;height:auto}
   #nmbd-root .nmbd-sidebar{width:100%;min-width:unset;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}
@@ -276,6 +239,9 @@
 
   var maps={}, userMarkers={worship:null,atm:null}, placeMarkers={worship:[],atm:[]};
 
+  /* ══════════════════════════════════════════════════════════
+     LOCATION
+  ══════════════════════════════════════════════════════════ */
   var _locResolve=null, _locReject=null, _locFallbackTimer=null;
   var _inIframe=(function(){ try{ return window.self!==window.top; }catch(e){ return true; } })();
 
@@ -298,15 +264,17 @@
     return new Promise(function(res,rej){
       if(!navigator.geolocation) return rej('Geolocation not supported');
       var settled=false, freshTimer=null;
+      // Phase A: fast cached fix (up to 60s old)
       navigator.geolocation.getCurrentPosition(
         function(p){
           if(settled) return;
           var pos={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy||9999};
           if(pos.acc<=300){ settled=true; clearTimeout(freshTimer); return res(pos); }
+          // Phase B: accuracy poor — try fresh GPS, fall back after 3s
           freshTimer=setTimeout(function(){ if(!settled){ settled=true; res(pos); } },3000);
           navigator.geolocation.getCurrentPosition(
             function(p2){ clearTimeout(freshTimer); if(!settled){ settled=true; res({lat:p2.coords.latitude,lon:p2.coords.longitude,acc:p2.coords.accuracy||9999}); } },
-            function(){ clearTimeout(freshTimer); if(!settled){ settled=true; res(pos); } },
+            function(){   clearTimeout(freshTimer); if(!settled){ settled=true; res(pos); } },
             {enableHighAccuracy:true,maximumAge:0,timeout:10000}
           );
         },
@@ -326,6 +294,8 @@
   function getLocation(){
     return new Promise(function(res,rej){
       if(!_inIframe) return rawGeolocate().then(res).catch(rej);
+      // Cancel any existing pending location request first
+      if(_locResolve){ clearTimeout(_locFallbackTimer); _locResolve=null; _locReject=null; }
       _locResolve=res; _locReject=rej;
       postToParent({type:'nmbd-req-loc'});
       _locFallbackTimer=setTimeout(function(){
@@ -336,6 +306,80 @@
     });
   }
 
+  /* ══════════════════════════════════════════════════════════
+     FIX 1: Round GPS to 3 decimal places (~100m grid).
+     This makes the Overpass cache key stable across tiny GPS
+     drift between sessions, so "5km search" always hits the
+     same cache entry instead of making a fresh query every time.
+  ══════════════════════════════════════════════════════════ */
+  function roundLoc(v){ return Math.round(v*1000)/1000; }
+
+  /* ══════════════════════════════════════════════════════════
+     OVERPASS
+     FIX 2: Never cache empty results (d.elements.length === 0).
+     Empty results from a busy/partial server would poison the
+     cache and cause permanent "no results" for that query key.
+  ══════════════════════════════════════════════════════════ */
+  var MIRRORS=[
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://overpass.private.coffee/api/interpreter',
+    'https://overpass.osm.ch/api/interpreter'
+  ];
+  var _cache={};
+  var TIMEOUT=28000, STAGGER=400, RETRY_WAIT=1500;
+
+  function tryMirror(url,body){
+    var ctrl=new AbortController();
+    var t=setTimeout(function(){ ctrl.abort(); },TIMEOUT);
+    return fetch(url,{method:'POST',body:body,mode:'cors',credentials:'omit',referrerPolicy:'no-referrer-when-downgrade',signal:ctrl.signal})
+      .then(function(r){ clearTimeout(t); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(d){ if(d.remark&&d.remark.indexOf('timeout')>-1) throw new Error('timeout'); if(!d.elements) throw new Error('bad response'); return d; })
+      .catch(function(e){ clearTimeout(t); throw e; });
+  }
+
+  function race(body){
+    return new Promise(function(resolve,reject){
+      var done=false,errs=[],timers=[];
+      function ok(d){ if(done) return; done=true; timers.forEach(clearTimeout); resolve(d); }
+      function fail(e){ errs.push(e); if(errs.length===MIRRORS.length&&!done){ done=true; reject(new Error('all mirrors failed')); } }
+      MIRRORS.forEach(function(url,i){
+        timers.push(setTimeout(function(){ tryMirror(url,body).then(ok).catch(fail); },i*STAGGER));
+      });
+    });
+  }
+
+  function overpassQuery(q, onRetry){
+    var now=Date.now();
+    // Only use cache if it has results AND is less than 3 minutes old
+    if(_cache[q] && _cache[q].count>0 && (now-_cache[q].ts)<180000){
+      return Promise.resolve(_cache[q].data);
+    }
+    var body='data='+encodeURIComponent(q);
+    return race(body)
+      .then(function(d){
+        // FIX 2: only cache non-empty results
+        if(d.elements && d.elements.length>0){
+          _cache[q]={ts:Date.now(), data:d, count:d.elements.length};
+        }
+        return d;
+      })
+      .catch(function(){
+        if(onRetry) onRetry();
+        return new Promise(function(r){ setTimeout(r,RETRY_WAIT); })
+          .then(function(){ return race(body); })
+          .then(function(d){
+            if(d.elements && d.elements.length>0){
+              _cache[q]={ts:Date.now(), data:d, count:d.elements.length};
+            }
+            return d;
+          });
+      });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     GOOGLE MAPS NAV
+  ══════════════════════════════════════════════════════════ */
   function openGoogleMaps(dLat,dLon,dName){
     var toast=g('nmbd-gmaps-toast'),label=g('nmbd-gmaps-dest-label'),cancel=g('nmbd-gmaps-cancel');
     label.textContent='Getting your location to navigate to: '+dName;
@@ -354,6 +398,9 @@
     });
   }
 
+  /* ══════════════════════════════════════════════════════════
+     MAPS INIT
+  ══════════════════════════════════════════════════════════ */
   function initMaps(){
     var tile='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var opt={attribution:'© OpenStreetMap',maxZoom:19};
@@ -385,7 +432,7 @@
     });
   }
   var WI={mosque:mkIcon('🕌','#2a5a3a'),hindu_temple:mkIcon('🛕','#7a3a00'),church:mkIcon('⛪','#3a3a7a'),buddhist:mkIcon('🪔','#5a4a00'),other:mkIcon('🏛','#3a3a3a')};
-  var ATM_ICON=mkIcon('🏧','#1a5a6a'),USER_ICON=mkIcon('👤','#0e6e6e');
+  var ATM_ICON=mkIcon('🏧','#1a5a6a'), USER_ICON=mkIcon('👤','#0e6e6e');
 
   function classify(tags){
     var r=(tags.religion||'').toLowerCase(),n=(tags.name||'').toLowerCase();
@@ -398,49 +445,6 @@
   var WE={mosque:'🕌',hindu_temple:'🛕',church:'⛪',buddhist:'🪔',other:'🏛'};
   var WL={mosque:'Mosque',hindu_temple:'Mandir / Temple',church:'Church',buddhist:'Pagoda / Buddhist',other:'Place of Worship'};
 
-  var MIRRORS=[
-    'https://overpass-api.de/api/interpreter',
-    'https://overpass.kumi.systems/api/interpreter',
-    'https://overpass.private.coffee/api/interpreter',
-    'https://overpass.osm.ch/api/interpreter'
-  ];
-  var _cache={};
-  var TIMEOUT=28000, STAGGER=400, RETRY_WAIT=1500;
-
-  function tryMirror(url,body){
-    var ctrl=new AbortController();
-    var t=setTimeout(function(){ ctrl.abort(); },TIMEOUT);
-    return fetch(url,{method:'POST',body:body,mode:'cors',credentials:'omit',referrerPolicy:'no-referrer-when-downgrade',signal:ctrl.signal})
-      .then(function(r){ clearTimeout(t); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-      .then(function(d){ if(d.remark&&d.remark.indexOf('timeout')>-1) throw new Error('timeout'); if(!d.elements) throw new Error('bad'); return d; })
-      .catch(function(e){ clearTimeout(t); throw e; });
-  }
-
-  function race(body){
-    return new Promise(function(resolve,reject){
-      var done=false,errs=[],timers=[];
-      function ok(d){ if(done) return; done=true; timers.forEach(clearTimeout); resolve(d); }
-      function fail(e){ errs.push(e); if(errs.length===MIRRORS.length&&!done){ done=true; reject(new Error('all failed')); } }
-      MIRRORS.forEach(function(url,i){
-        timers.push(setTimeout(function(){ tryMirror(url,body).then(ok).catch(fail); },i*STAGGER));
-      });
-    });
-  }
-
-  function overpassQuery(q,onRetry){
-    var now=Date.now();
-    if(_cache[q]&&(now-_cache[q].ts)<180000) return Promise.resolve(_cache[q].data);
-    var body='data='+encodeURIComponent(q);
-    return race(body)
-      .then(function(d){ _cache[q]={ts:Date.now(),data:d}; return d; })
-      .catch(function(){
-        if(onRetry) onRetry();
-        return new Promise(function(r){ setTimeout(r,RETRY_WAIT); })
-          .then(function(){ return race(body); })
-          .then(function(d){ _cache[q]={ts:Date.now(),data:d}; return d; });
-      });
-  }
-
   function showLocPrompt(){ var el=g('nmbd-loc-prompt'); if(el) el.classList.add('visible'); }
   function hideLocPrompt(){ var el=g('nmbd-loc-prompt'); if(el) el.classList.remove('visible'); }
   function spin(){ return '<div style="width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:nmbd-spin .7s linear infinite;display:inline-block;vertical-align:middle"></div>'; }
@@ -450,7 +454,7 @@
     list.innerHTML=
       '<div style="padding:9px">'+
         '<div class="nmbd-err">⚠️ Map servers are busy right now.'+
-          '<div class="nmbd-err-detail">Tried all 4 servers twice. This usually clears up in under a minute.</div>'+
+          '<div class="nmbd-err-detail">Tried all 4 servers twice. Usually clears in under a minute.</div>'+
         '</div>'+
         '<button class="nmbd-retry-btn" id="nmbd-manual-retry">🔄 Try Again</button>'+
       '</div>';
@@ -462,9 +466,7 @@
     return '<button id="'+id+'" style="margin-top:6px;width:100%;padding:5px;background:#1a7340;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🗺️ Open in Google Maps</button>';
   }
 
-  /* ══════════════════════════════════════════════════════════
-     CLEAR HELPERS — wipe map markers + list + count instantly
-  ══════════════════════════════════════════════════════════ */
+  /* ══ CLEAR HELPERS ══ */
   function clearWorship(){
     placeMarkers.worship.forEach(function(m){ maps.worship.removeLayer(m); });
     placeMarkers.worship=[];
@@ -473,7 +475,6 @@
     g('nmbd-worship-badge').textContent='Searching…';
     g('nmbd-worship-list').innerHTML='';
   }
-
   function clearATM(){
     placeMarkers.atm.forEach(function(m){ maps.atm.removeLayer(m); });
     placeMarkers.atm=[];
@@ -484,36 +485,8 @@
   }
 
   /* ══ WORSHIP ══ */
-  function buildWorshipQuery(lat,lon,radius){
-    return '[out:json][timeout:30][maxsize:2097152];node["amenity"="place_of_worship"](around:'+radius+','+lat+','+lon+');out;';
-  }
-
-  function doWorshipQuery(loc,radius,types,list,attempt,origRadius){
-    var q=buildWorshipQuery(loc.lat,loc.lon,radius);
-    list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
-    return overpassQuery(q,function(){
-      list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
-    }).then(function(d){
-      var places=(d.elements||[]).map(function(el){
-        var lt=el.lat||(el.center&&el.center.lat),ln=el.lon||(el.center&&el.center.lon);
-        if(!lt||!ln) return null;
-        var tp=classify(el.tags||{});
-        return {id:el.id,lat:lt,lon:ln,type:tp,dist:haversine(loc.lat,loc.lon,lt,ln),tags:el.tags||{}};
-      }).filter(function(p){ return p&&types.indexOf(p.type)>-1; });
-      places.sort(function(a,b){ return a.dist-b.dist; });
-      var maxAuto=15000;
-      if(places.length===0&&radius<maxAuto&&attempt<3){
-        var next=Math.min(radius*2,maxAuto);
-        list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>No results at '+fmtDist(radius)+'…<div class="nmbd-status-sub">Expanding to '+fmtDist(next)+'</div></div>';
-        return doWorshipQuery(loc,next,types,list,attempt+1,origRadius);
-      }
-      renderWorship(places,loc,radius,origRadius);
-      return places;
-    });
-  }
-
   function searchWorship(){
-    var btn=g('nmbd-worship-btn'),list=g('nmbd-worship-list'),badge=g('nmbd-worship-badge'),li=g('nmbd-worship-locinfo');
+    var btn=g('nmbd-worship-btn'), list=g('nmbd-worship-list'), badge=g('nmbd-worship-badge'), li=g('nmbd-worship-locinfo');
     var types=[];
     document.querySelectorAll('#nmbd-worship-chips .nmbd-chip.on').forEach(function(c){ types.push(c.dataset.type); });
     if(!types.length){
@@ -523,19 +496,33 @@
 
     btn.disabled=true;
     btn.innerHTML=spin()+' Locating…';
-
-    /* Clear previous results immediately so stale data never lingers */
     clearWorship();
-
     list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
     showLocPrompt();
-    var origRadius=parseInt(g('nmbd-worship-radius').value,10);
+
+    var radius=parseInt(g('nmbd-worship-radius').value,10);
 
     getLocation()
       .then(function(loc){
         hideLocPrompt();
-        li.innerHTML='<div class="nmbd-loc-pill">✅ '+loc.lat.toFixed(4)+', '+loc.lon.toFixed(4)+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
-        return doWorshipQuery(loc,origRadius,types,list,1,origRadius);
+        // FIX 1: round coordinates for stable cache key
+        var lat=roundLoc(loc.lat), lon=roundLoc(loc.lon);
+        li.innerHTML='<div class="nmbd-loc-pill">✅ '+lat+', '+lon+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
+        list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
+
+        var q='[out:json][timeout:30][maxsize:2097152];node["amenity"="place_of_worship"](around:'+radius+','+lat+','+lon+');out;';
+        return overpassQuery(q, function(){
+          list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
+        }).then(function(d){
+          var places=(d.elements||[]).map(function(el){
+            var lt=el.lat||(el.center&&el.center.lat), ln=el.lon||(el.center&&el.center.lon);
+            if(!lt||!ln) return null;
+            var tp=classify(el.tags||{});
+            return {id:el.id,lat:lt,lon:ln,type:tp,dist:haversine(lat,lon,lt,ln),tags:el.tags||{}};
+          }).filter(function(p){ return p&&types.indexOf(p.type)>-1; });
+          places.sort(function(a,b){ return a.dist-b.dist; });
+          renderWorship(places,{lat:lat,lon:lon},radius);
+        });
       })
       .catch(function(err){
         hideLocPrompt();
@@ -552,24 +539,19 @@
       });
   }
 
-  function renderWorship(places,loc,usedRadius,origRadius){
-    var map=maps.worship,list=g('nmbd-worship-list'),ct=g('nmbd-worship-count'),badge=g('nmbd-worship-badge');
-
-    /* Safety-net clear in case render is called directly */
+  function renderWorship(places,loc,radius){
+    var map=maps.worship, list=g('nmbd-worship-list'), ct=g('nmbd-worship-count'), badge=g('nmbd-worship-badge');
     placeMarkers.worship.forEach(function(m){ map.removeLayer(m); }); placeMarkers.worship=[];
     if(userMarkers.worship) map.removeLayer(userMarkers.worship);
-
     userMarkers.worship=L.marker([loc.lat,loc.lon],{icon:USER_ICON}).addTo(map).bindPopup('<b>📍 You are here</b>');
 
     if(!places.length){
-      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No results found within '+fmtDist(usedRadius)+'.<div class="nmbd-status-sub">Try selecting more types or increasing the radius slider.</div></div>';
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No results within '+fmtDist(radius)+'.<div class="nmbd-status-sub">Try increasing the radius slider and searching again.</div></div>';
       ct.textContent=''; badge.textContent='No results';
       map.setView([loc.lat,loc.lon],14); return;
     }
 
-    var expandNote=(usedRadius>origRadius)
-      ?'<span class="nmbd-expand-note">📡 Auto-expanded to '+fmtDist(usedRadius)+'</span>':'';
-    ct.innerHTML='Found <b>'+places.length+'</b> places '+expandNote;
+    ct.innerHTML='Found <b>'+places.length+'</b> places';
     badge.innerHTML='<span>'+places.length+'</span> found';
     list.innerHTML='';
 
@@ -588,12 +570,8 @@
           '</div>'+
           '<div class="nmbd-cdist">'+fmtDist(p.dist)+'</div>'+
         '</div>'+
-        '<div class="nmbd-cactions">'+
-          '<button class="nmbd-nav-btn">🗺️ Open in Google Maps</button>'+
-        '</div>';
-      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){
-        e.stopPropagation(); openGoogleMaps(p.lat,p.lon,name);
-      });
+        '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🗺️ Open in Google Maps</button></div>';
+      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){ e.stopPropagation(); openGoogleMaps(p.lat,p.lon,name); });
       card.addEventListener('click',function(){
         document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); map.setView([p.lat,p.lon],17); placeMarkers.worship[i].openPopup();
@@ -603,9 +581,7 @@
       var popId='nmbd-mpop-w'+p.id;
       var mk=L.marker([p.lat,p.lon],{icon:WI[p.type]||WI.other}).addTo(map)
         .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+WL[p.type]+'</small><br><small style="color:#e8c96e">'+fmtDist(p.dist)+' away</small><br>'+popupNavBtn(popId,p.lat,p.lon,name));
-      mk.on('popupopen',function(){
-        var b=document.getElementById(popId); if(b) b.onclick=function(){ openGoogleMaps(p.lat,p.lon,name); };
-      });
+      mk.on('popupopen',function(){ var b=document.getElementById(popId); if(b) b.onclick=function(){ openGoogleMaps(p.lat,p.lon,name); }; });
       mk.on('click',function(){
         document.querySelectorAll('#nmbd-panel-worship .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -616,52 +592,37 @@
   }
 
   /* ══ ATM ══ */
-  function buildATMQuery(lat,lon,radius){
-    return '[out:json][timeout:30][maxsize:2097152];(node["amenity"="atm"](around:'+radius+','+lat+','+lon+');node["amenity"="bank"](around:'+radius+','+lat+','+lon+'););out;';
-  }
-
-  function doATMQuery(loc,radius,bf,list,attempt,origRadius){
-    var q=buildATMQuery(loc.lat,loc.lon,radius);
-    list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
-    return overpassQuery(q,function(){
-      list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
-    }).then(function(d){
-      var atms=(d.elements||[]).map(function(e){
-        if(!e.lat||!e.lon) return null;
-        var t=e.tags||{},nm=t.operator||t.name||t.brand||'Unknown Bank';
-        return {id:e.id,lat:e.lat,lon:e.lon,name:nm,dist:haversine(loc.lat,loc.lon,e.lat,e.lon),tags:t,type:t.amenity};
-      }).filter(function(a){ return a&&(!bf||a.name.toLowerCase().includes(bf)); });
-      atms.sort(function(a,b){ return a.dist-b.dist; });
-      var maxAuto=15000;
-      if(atms.length===0&&radius<maxAuto&&attempt<3){
-        var next=Math.min(radius*2,maxAuto);
-        list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>No ATMs at '+fmtDist(radius)+'…<div class="nmbd-status-sub">Expanding to '+fmtDist(next)+'</div></div>';
-        return doATMQuery(loc,next,bf,list,attempt+1,origRadius);
-      }
-      renderATM(atms,loc,bf,radius,origRadius);
-      return atms;
-    });
-  }
-
   function searchATM(){
-    var btn=g('nmbd-atm-btn'),list=g('nmbd-atm-list'),badge=g('nmbd-atm-badge'),li=g('nmbd-atm-locinfo');
+    var btn=g('nmbd-atm-btn'), list=g('nmbd-atm-list'), badge=g('nmbd-atm-badge'), li=g('nmbd-atm-locinfo');
     var bf=(g('nmbd-bank-filter').value||'').toLowerCase();
 
     btn.disabled=true;
     btn.innerHTML=spin()+' Locating…';
-
-    /* Clear previous results immediately so stale data never lingers */
     clearATM();
-
     list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
     showLocPrompt();
-    var origRadius=parseInt(g('nmbd-atm-radius').value,10);
+
+    var radius=parseInt(g('nmbd-atm-radius').value,10);
 
     getLocation()
       .then(function(loc){
         hideLocPrompt();
-        li.innerHTML='<div class="nmbd-loc-pill">✅ '+loc.lat.toFixed(4)+', '+loc.lon.toFixed(4)+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
-        return doATMQuery(loc,origRadius,bf,list,1,origRadius);
+        var lat=roundLoc(loc.lat), lon=roundLoc(loc.lon);
+        li.innerHTML='<div class="nmbd-loc-pill">✅ '+lat+', '+lon+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
+        list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
+
+        var q='[out:json][timeout:30][maxsize:2097152];(node["amenity"="atm"](around:'+radius+','+lat+','+lon+');node["amenity"="bank"](around:'+radius+','+lat+','+lon+'););out;';
+        return overpassQuery(q, function(){
+          list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
+        }).then(function(d){
+          var atms=(d.elements||[]).map(function(e){
+            if(!e.lat||!e.lon) return null;
+            var t=e.tags||{}, nm=t.operator||t.name||t.brand||'Unknown Bank';
+            return {id:e.id,lat:e.lat,lon:e.lon,name:nm,dist:haversine(lat,lon,e.lat,e.lon),tags:t,type:t.amenity};
+          }).filter(function(a){ return a&&(!bf||a.name.toLowerCase().includes(bf)); });
+          atms.sort(function(a,b){ return a.dist-b.dist; });
+          renderATM(atms,{lat:lat,lon:lon},bf,radius);
+        });
       })
       .catch(function(err){
         hideLocPrompt();
@@ -678,24 +639,19 @@
       });
   }
 
-  function renderATM(atms,loc,bf,usedRadius,origRadius){
-    var map=maps.atm,list=g('nmbd-atm-list'),ct=g('nmbd-atm-count'),badge=g('nmbd-atm-badge');
-
-    /* Safety-net clear */
+  function renderATM(atms,loc,bf,radius){
+    var map=maps.atm, list=g('nmbd-atm-list'), ct=g('nmbd-atm-count'), badge=g('nmbd-atm-badge');
     placeMarkers.atm.forEach(function(m){ map.removeLayer(m); }); placeMarkers.atm=[];
     if(userMarkers.atm) map.removeLayer(userMarkers.atm);
-
     userMarkers.atm=L.marker([loc.lat,loc.lon],{icon:USER_ICON}).addTo(map).bindPopup('<b>📍 You are here</b>');
 
     if(!atms.length){
-      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No ATMs found'+(bf?' for this bank':'')+' within '+fmtDist(usedRadius)+'.<div class="nmbd-status-sub">Try increasing the radius or selecting All Banks.</div></div>';
+      list.innerHTML='<div class="nmbd-status"><div class="nmbd-status-icon">🔍</div>No ATMs found'+(bf?' for this bank':'')+' within '+fmtDist(radius)+'.<div class="nmbd-status-sub">Try increasing the radius or selecting All Banks.</div></div>';
       ct.textContent=''; badge.textContent='No ATMs';
       map.setView([loc.lat,loc.lon],15); return;
     }
 
-    var expandNote=(usedRadius>origRadius)
-      ?'<span class="nmbd-expand-note">📡 Auto-expanded to '+fmtDist(usedRadius)+'</span>':'';
-    ct.innerHTML='Found <b>'+atms.length+'</b> ATMs '+expandNote;
+    ct.innerHTML='Found <b>'+atms.length+'</b> ATMs';
     badge.innerHTML='<span>'+atms.length+'</span> ATMs';
     list.innerHTML='';
 
@@ -714,12 +670,8 @@
           '</div>'+
           '<div class="nmbd-cdist">'+fmtDist(a.dist)+'</div>'+
         '</div>'+
-        '<div class="nmbd-cactions">'+
-          '<button class="nmbd-nav-btn">🗺️ Open in Google Maps</button>'+
-        '</div>';
-      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){
-        e.stopPropagation(); openGoogleMaps(a.lat,a.lon,a.name);
-      });
+        '<div class="nmbd-cactions"><button class="nmbd-nav-btn">🗺️ Open in Google Maps</button></div>';
+      card.querySelector('.nmbd-nav-btn').addEventListener('click',function(e){ e.stopPropagation(); openGoogleMaps(a.lat,a.lon,a.name); });
       card.addEventListener('click',function(){
         document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); map.setView([a.lat,a.lon],18); placeMarkers.atm[i].openPopup();
@@ -729,9 +681,7 @@
       var popId='nmbd-mpop-a'+a.id;
       var mk=L.marker([a.lat,a.lon],{icon:ATM_ICON}).addTo(map)
         .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+(isATM?'🏧 ATM':'🏦 Bank')+'</small><br><small style="color:#e8c96e">'+fmtDist(a.dist)+' away</small><br>'+popupNavBtn(popId,a.lat,a.lon,a.name));
-      mk.on('popupopen',function(){
-        var b=document.getElementById(popId); if(b) b.onclick=function(){ openGoogleMaps(a.lat,a.lon,a.name); };
-      });
+      mk.on('popupopen',function(){ var b=document.getElementById(popId); if(b) b.onclick=function(){ openGoogleMaps(a.lat,a.lon,a.name); }; });
       mk.on('click',function(){
         document.querySelectorAll('#nmbd-panel-atm .nmbd-card').forEach(function(c){ c.classList.remove('active-card'); });
         card.classList.add('active-card'); card.scrollIntoView({behavior:'smooth',block:'nearest'});
