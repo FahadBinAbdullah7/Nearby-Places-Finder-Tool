@@ -79,9 +79,9 @@
 #nmbd-root input[type=range]{flex:1;accent-color:var(--gold);height:4px;cursor:pointer}
 #nmbd-root .nmbd-radius-val{font-size:0.74rem;color:var(--gold-light);font-weight:600;min-width:38px;text-align:right}
 
-/* ── BUTTON ROW (Search + Clear side by side) ── */
-#nmbd-root .nmbd-btn-row{display:flex;gap:7px;margin-top:8px;align-items:stretch}
-#nmbd-root .nmbd-search-btn{flex:1;padding:9px;background:linear-gradient(135deg,var(--teal),var(--teal-light));border:none;border-radius:8px;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px}
+/* ── BUTTON STACK (Search on top, Clear below) ── */
+#nmbd-root .nmbd-btn-row{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+#nmbd-root .nmbd-search-btn{width:100%;padding:9px;background:linear-gradient(135deg,var(--teal),var(--teal-light));border:none;border-radius:8px;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px}
 #nmbd-root .nmbd-search-btn:hover{opacity:.88}
 #nmbd-root .nmbd-search-btn:active{transform:scale(.98)}
 #nmbd-root .nmbd-search-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -89,7 +89,7 @@
 /* ── CLEAR ALL BUTTON ── */
 #nmbd-root .nmbd-clear-btn{
   display:none;
-  padding:9px 11px;
+  width:100%;padding:8px;
   background:var(--red-bg);
   border:1px solid var(--red-dim);
   border-radius:8px;
@@ -97,7 +97,6 @@
   font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:700;
   cursor:pointer;transition:all .18s;
   align-items:center;justify-content:center;gap:5px;
-  white-space:nowrap;flex-shrink:0;
   animation:nmbd-fadein .22s ease;
 }
 #nmbd-root .nmbd-clear-btn.visible{display:flex}
