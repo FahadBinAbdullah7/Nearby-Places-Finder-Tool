@@ -348,6 +348,9 @@
 
   var maps = {};
   var _navActive = {worship:false, atm:false};
+  // Session location cache — same GPS fix reused across searches within a session
+  // so radius changes don't bust the Overpass query cache via coordinate drift.
+  var _lastLoc = null;
 
   /* ── Show / hide the Clear button ── */
   function showClearBtn(tab){ g('nmbd-'+tab+'-clear-btn').classList.add('visible'); }
@@ -387,8 +390,9 @@
     g('nmbd-worship-radius').value = 3000;
     g('nmbd-worship-rval').textContent = '3km';
 
-    // Wipe entire cache
+    // Wipe entire cache + session location
     _cache = {};
+    _lastLoc = null;
 
     g('nmbd-worship-count').textContent = '';
     g('nmbd-worship-badge').textContent = 'Ready — search again';
@@ -418,6 +422,7 @@
     g('nmbd-atm-radius').value = 2000;
     g('nmbd-atm-rval').textContent = '2km';
     _cache = {};
+    _lastLoc = null;
 
     g('nmbd-atm-count').textContent = '';
     g('nmbd-atm-badge').textContent = 'Ready — search again';
@@ -519,6 +524,17 @@
   }
 
   function roundLoc(v){ return Math.round(v*1000)/1000; }
+
+  // Returns the cached location for this session, or fetches a fresh one.
+  // Resets when the user clears the session, so they always get a live fix
+  // after a full clear — but not between radius-change re-searches.
+  function getSessionLocation(){
+    if(_lastLoc) return Promise.resolve(_lastLoc);
+    return getLocation().then(function(loc){
+      _lastLoc = loc;
+      return loc;
+    });
+  }
 
   var MIRRORS=[
     'https://overpass-api.de/api/interpreter',
@@ -622,15 +638,6 @@
 
   function fmtDist(m){ return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km'; }
 
-  function mkIcon(emoji,bg){
-    return L.divIcon({
-      html:'<div style="font-size:17px;background:'+bg+';width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3);box-shadow:0 2px 8px rgba(0,0,0,.5)">'+emoji+'</div>',
-      className:'',iconSize:[29,29],iconAnchor:[14,14],popupAnchor:[0,-15]
-    });
-  }
-
-  var WI={mosque:mkIcon('🕌','#2a5a3a'),hindu_temple:mkIcon('🛕','#7a3a00'),church:mkIcon('⛪','#3a3a7a'),buddhist:mkIcon('🪔','#5a4a00'),other:mkIcon('🏛','#3a3a3a')};
-  var ATM_ICON=mkIcon('🏧','#1a5a6a'), USER_ICON=mkIcon('👤','#0e6e6e');
 
   function classify(tags){
     var r=(tags.religion||'').toLowerCase(),n=(tags.name||'').toLowerCase();
@@ -662,9 +669,6 @@
     if(b) b.addEventListener('click',retryFn);
   }
 
-  function popupNavBtn(id,dLat,dLon,dName,tab){
-    return '<button id="'+id+'" style="margin-top:6px;width:100%;padding:5px;background:#1a7340;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.73rem;font-weight:600">🗺️ Open in Google Maps</button>';
-  }
 
   /* ══ WORSHIP SEARCH ══ */
   function searchWorship(){
@@ -684,13 +688,12 @@
     list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
     showLocPrompt();
     var radius=parseInt(g('nmbd-worship-radius').value,10);
-    getLocation()
+    getSessionLocation()
       .then(function(loc){
         hideLocPrompt();
         var lat=roundLoc(loc.lat), lon=roundLoc(loc.lon);
         li.innerHTML='<div class="nmbd-loc-pill">✅ '+lat+', '+lon+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
         list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
-        L.marker([lat, lon], {icon: USER_ICON}).addTo(maps.worship).bindPopup('<b>📍 You are here</b>');
         var q='[out:json][timeout:30][maxsize:2097152];node["amenity"="place_of_worship"](around:'+radius+','+lat+','+lon+');out;';
         return overpassQuery(q, function(){
           list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
@@ -755,13 +758,6 @@
         card.classList.add('active-card'); map.setView([p.lat, p.lon], 17);
       });
       list.appendChild(card);
-      var popId = 'nmbd-mpop-w'+p.id;
-      var mk = L.marker([p.lat, p.lon], {icon: WI[p.type]||WI.other}).addTo(map)
-        .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+WL[p.type]+'</small><br><small style="color:#e8c96e">'+fmtDist(p.dist)+' away</small><br>'+popupNavBtn(popId,p.lat,p.lon,name,'worship'));
-      mk.on('popupopen',function(){
-        var b = document.getElementById(popId);
-        if(b) b.onclick = function(){ openGoogleMaps(p.lat, p.lon, name, 'worship'); };
-      });
     });
     map.fitBounds(L.latLngBounds(places.map(p => [p.lat, p.lon])).pad(0.2));
   }
@@ -778,13 +774,12 @@
     list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Getting your location…</div>';
     showLocPrompt();
     var radius=parseInt(g('nmbd-atm-radius').value,10);
-    getLocation()
+    getSessionLocation()
       .then(function(loc){
         hideLocPrompt();
         var lat=roundLoc(loc.lat), lon=roundLoc(loc.lon);
         li.innerHTML='<div class="nmbd-loc-pill">✅ '+lat+', '+lon+(loc.acc?' (±'+Math.round(loc.acc)+'m)':'')+'</div>';
         list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Searching within '+fmtDist(radius)+'…</div>';
-        L.marker([lat, lon], {icon: USER_ICON}).addTo(maps.atm).bindPopup('<b>📍 You are here</b>');
         var q='[out:json][timeout:30][maxsize:2097152];(node["amenity"="atm"](around:'+radius+','+lat+','+lon+');node["amenity"="bank"](around:'+radius+','+lat+','+lon+'););out;';
         return overpassQuery(q, function(){
           list.innerHTML='<div class="nmbd-status"><div class="nmbd-spinner"></div>Retrying on backup server…</div>';
@@ -847,13 +842,6 @@
         card.classList.add('active-card'); map.setView([a.lat, a.lon], 18);
       });
       list.appendChild(card);
-      var popId = 'nmbd-mpop-a'+a.id;
-      var mk = L.marker([a.lat, a.lon], {icon: ATM_ICON}).addTo(map)
-        .bindPopup('<b>'+sn+'</b><br><small style="color:#12908f">'+(isATM?'🏧 ATM':'🏦 Bank')+'</small><br><small style="color:#e8c96e">'+fmtDist(a.dist)+' away</small><br>'+popupNavBtn(popId,a.lat,a.lon,a.name,'atm'));
-      mk.on('popupopen',function(){
-        var b = document.getElementById(popId);
-        if(b) b.onclick = function(){ openGoogleMaps(a.lat, a.lon, a.name, 'atm'); };
-      });
     });
     map.fitBounds(L.latLngBounds(atms.map(a => [a.lat, a.lon])).pad(0.2));
   }
